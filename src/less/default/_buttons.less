@@ -109,11 +109,13 @@
 
   &.btn-primary {
 
-    color: @white;
-    background: @textGray;
+    color: @red;
+    background: none;
+    box-shadow: inset 0 0 0 1px @red;
 
     &:hover {
-      background: darken(@textGray, 10%);
+      color: @white;
+      background: @red;
     }
 
   }

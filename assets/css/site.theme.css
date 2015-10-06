@@ -389,12 +389,14 @@ form input[type=search].btn-link {
 }
 form input[type=submit].btn-primary,
 form input[type=search].btn-primary {
-  color: #ffffff;
-  background: #666666;
+  color: #d6362d;
+  background: none;
+  box-shadow: inset 0 0 0 1px #d6362d;
 }
 form input[type=submit].btn-primary:hover,
 form input[type=search].btn-primary:hover {
-  background: #4d4d4d;
+  color: #ffffff;
+  background: #d6362d;
 }
 form input[type=submit]-icon,
 form input[type=search]-icon {
@@ -590,12 +592,14 @@ form input[type=search].btn-success.btn-default {
 }
 .btn.btn-primary,
 #header .menu li.btn-primary {
-  color: #ffffff;
-  background: #666666;
+  color: #d6362d;
+  background: none;
+  box-shadow: inset 0 0 0 1px #d6362d;
 }
 .btn.btn-primary:hover,
 #header .menu li.btn-primary:hover {
-  background: #4d4d4d;
+  color: #ffffff;
+  background: #d6362d;
 }
 .btn-icon,
 #header .menu li-icon {
@@ -825,7 +829,7 @@ form input[type=search].btn-success.btn-default {
   font-weight: 700;
   color: #d64242;
   background: url('/assets/img/cci_logo.jpg') left center no-repeat;
-  background-size: contain;
+  background-size: auto 80%;
   text-indent: -99999px;
   width: 100%;
 }
@@ -1169,10 +1173,10 @@ form input[type=search].btn-success.btn-default {
 }
 .carousel-header {
   position: absolute;
-  z-index: 20;
+  z-index: 21;
   width: 100%;
   color: #ffffff;
-  padding: 25px 0;
+  padding: 0 0;
 }
 .carousel-header a {
   color: inherit;
