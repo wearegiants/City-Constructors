@@ -1048,6 +1048,11 @@ form input[type=search].btn-success.btn-default {
 .project-wrapper {
   overflow: hidden;
 }
+@media screen and (min-width: 980px) {
+  .project-wrapper {
+    padding-top: 10px;
+  }
+}
 @media screen and (min-width: 300px) {
   .project-content {
     background: transparent;
