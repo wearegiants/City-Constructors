@@ -10,16 +10,14 @@
 </div>
 
 <div class="carousel">
-<div class="carousel-slide background" data-background-options='{"source":"/wp-content/uploads/2015/09/AKA-Hotel-2.jpg"}'>
-<div class="carousel-slide__meta section section-compact">
-<div class="fs-row">
-<div class="fs-cell fs-lg-7 fs-md-5 fs-sm-3">
-
-<p class="emphasized">Our mission is to construct the most eye-catching and notable spaces in Los Angeles.</p>
-<small><a href="#">The Hollywood Roosevelt Hotel</a></small>
-
-</div>
-</div>
-</div>
-</div>
+  <div class="carousel-slide background" data-background-options='{"source":"/wp-content/uploads/2015/09/AKA-Hotel-2.jpg"}'>
+    <div class="carousel-slide__meta section section-compact">
+      <div class="fs-row">
+        <div class="fs-cell fs-lg-7 fs-md-5 fs-sm-3">
+          <p class="emphasized">Our mission is to construct the most eye-catching and notable spaces in Los Angeles.</p>
+          <small><a href="/projects/aka-hotel/">AKA Hotel</a></small>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
