@@ -1191,7 +1191,11 @@ form input[type=search].btn-success.btn-default {
   z-index: 21;
   width: 100%;
   color: #ffffff;
-  padding: 0 0;
+}
+@media screen and (min-width: 980px) {
+  .carousel-header {
+    padding: 25px 0;
+  }
 }
 .carousel-header a {
   color: inherit;
