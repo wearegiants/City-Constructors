@@ -46,7 +46,7 @@
     </menu>
     <?php endif; ?>
     <?php if(!is_front_page()): ?>
-    <menu id="header-main" class="fs-cell fs-lg-1 fs-md-4 fs-sm-2 text-right">
+    <menu id="header-main" class="fs-cell fs-lg-2 fs-md-4 fs-sm-2 text-right">
       <a href="/" id="header--logo" class="btn btn-logo btn-nav btn-last">CC</a>
     </menu>
     <?php endif; ?>

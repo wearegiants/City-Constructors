@@ -23,8 +23,15 @@
     margin: 0;
     font-weight: 700;
     color: @mainColor;
-    background: url('/assets/img/cci_logo.jpg') left center no-repeat;
-    background-size: auto 80%;
+    @media @min {
+      background: url('/assets/img/cci_logo.jpg') left center no-repeat;
+      background-size: auto 80%;  
+    }
+    @media @desktop {
+      background: url('/assets/img/cci_logo.jpg') right center no-repeat;
+      background-size: auto 100%;   
+    }
+    
     text-indent: -99999px;
     width: 100%;
   }

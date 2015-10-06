@@ -828,10 +828,20 @@ form input[type=search].btn-success.btn-default {
   margin: 0;
   font-weight: 700;
   color: #d64242;
-  background: url('/assets/img/cci_logo.jpg') left center no-repeat;
-  background-size: auto 80%;
   text-indent: -99999px;
   width: 100%;
+}
+@media screen and (min-width: 300px) {
+  #header--logo {
+    background: url('/assets/img/cci_logo.jpg') left center no-repeat;
+    background-size: auto 80%;
+  }
+}
+@media screen and (min-width: 980px) {
+  #header--logo {
+    background: url('/assets/img/cci_logo.jpg') right center no-repeat;
+    background-size: auto 100%;
+  }
 }
 @media screen and (min-width: 300px) {
   #header-main {
