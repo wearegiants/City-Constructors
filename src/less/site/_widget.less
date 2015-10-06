@@ -1,0 +1,54 @@
+.widget {
+
+  position: relative;
+
+  &-wrap {
+    position: relative;
+    z-index: 9;
+  }
+
+  &-image {
+    &__img {
+      border-radius: 50%;
+    }
+  }
+
+  &-content {
+
+    position: relative;
+
+    .btn {
+      margin-bottom: 0;
+    }
+
+    &.equal {
+      position: relative;
+    }
+
+    &__centered {
+      .center();
+      width: 100%;
+    }
+
+  }
+
+  &-bg {
+    .cover();
+    height: auto;
+    z-index: -1;
+    background: @bgGray;
+    @media @min {
+      top: 5px;
+      bottom: 5px;  
+    }
+    @media @tablet {
+      top: 10px;
+      bottom: 10px;  
+    }
+    @media @desktop {
+      top: 15px;
+      bottom: 15px;  
+    }
+  }
+
+}

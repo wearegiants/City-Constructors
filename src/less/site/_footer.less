@@ -1,0 +1,54 @@
+#footer {
+
+  @media @min {
+    background: darken(@bgGray, 2%);
+  }
+
+  @media @desktop {
+    background: none;
+  }
+  
+  .font_size(14);
+  line-height: 1.8;
+
+  .menu {
+    padding: 0;
+
+    li {
+      margin: 0;
+      &:before {
+        display: none;
+      }
+    }
+
+    .btn.btn-nav {
+      padding: 0;
+      line-height: 1.8;
+      height: auto;
+    }
+
+  }
+
+  .widget {
+    @media @min {
+      border-bottom: 1px solid darken(@bgGray, 7%);
+      margin-bottom: @spaced/2;
+      padding-bottom: @spaced/2;
+      .menu {
+        margin-bottom: 0;
+      }
+      p {
+        margin-bottom: 0;
+      }
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+    @media @desktop {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+}

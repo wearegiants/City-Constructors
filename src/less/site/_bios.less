@@ -1,0 +1,37 @@
+.bio {
+
+  &-primary {
+
+    &_image {
+
+      position: relative;
+
+      &.second {
+        background: lighten(@black, 10%);
+      }
+
+      > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      &--bg {
+        background: @black;
+        z-index: 0;
+        .cover();
+        height: auto;
+        top: @spaced;
+        bottom: 0;
+      }
+
+    }
+
+    &_title {
+      width: 100%;
+      color: @white;
+      .center();
+    }
+
+  }
+
+}

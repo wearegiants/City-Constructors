@@ -1,0 +1,163 @@
+.project {
+
+  position: relative;
+
+  &:hover {
+    .project {
+      &-meta {
+        @media @tablet {
+          opacity: 1;
+          background: @black75;
+        }
+      }
+    }
+  }
+
+  @height: 20px;
+
+  &-title {
+    color: @white;
+    margin: 0;
+  }
+
+  &-meta {
+    
+    position: absolute;
+    z-index: 2;
+    color: @white;
+    .transition();
+
+    &.cover {
+      .cover();
+    }
+
+    &.bottom {
+      bottom: 0;
+      ///opacity: 0;
+    }
+
+
+
+  }
+
+  &-image {
+    @media @min {
+      height: 130px;
+      margin-bottom: @height/2;
+    }
+    @media @tablet {
+      height: 275px;
+      margin-bottom: @height;
+    }
+    @media @desktop {
+      height: 275px;
+    }
+
+    &.tall {
+      @media @min {
+        height: 260px + @height/2;
+      }
+      @media @tablet {
+        height: 550px + @height;
+      }
+      @media @desktop {
+        height: 550px + @height;  
+      }
+    }
+
+    &.medium {
+      @media @min {
+        height: 125px + @height;
+      }
+      @media @tablet {
+        height: 400px + @height;
+      }
+      @media @desktop {
+        height: 400px + @height;
+      }
+    }
+
+    &.tennant-improvements {
+      height: 275px;
+    }
+
+  }
+
+  &-featured {
+
+    position: relative;
+
+    &_meta {
+      position: absolute;
+      z-index: 2;
+      color: @white;
+    }
+
+    &_subtitle {
+      color: @white;
+      margin: 0;
+    }
+
+  }
+
+  &-wrapper {
+    position: relative;
+  }
+
+  &-nav {
+    @media @min {
+      position: absolute; 
+      max-width: 50px;
+      left: 0;
+      bottom: 0;
+    }
+    @media @desktop {
+      width: auto;
+      height: 100%;
+      max-width: 300px;
+      left: 0;
+      right: auto;
+    }
+    
+    z-index: 25;
+    nav {
+      @media @min {
+        background: @black;
+      }
+      @media @desktop {
+        background: transparent;
+        .center();
+      }
+      a {
+        display: block;
+        text-align: center;
+        opacity: .5;
+        @media @min {
+          color: @white;
+        }
+        @media @desktop {
+          color: @black;
+        }
+        &:hover {
+          opacity: 1;
+        }
+        &:before {
+          .font_size(24);
+        }
+      }
+    }
+  }
+
+  &-tennant-improvements {
+    margin-bottom: @height;
+    .project {
+      &-image {
+        margin-bottom: 0;
+      }
+      &-meta {
+        opacity: 0;
+      }
+    }
+  }
+
+} 

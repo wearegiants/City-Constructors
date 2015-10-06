@@ -1,0 +1,47 @@
+#mobile {
+
+	&-menu {
+		.cover();
+		//position: fixed;
+		opacity: 0;
+		pointer-events: none;
+		.transition();
+		&.fs-swap {
+			&-active {
+				opacity: 1;
+				pointer-events: auto;
+				z-index: 20;
+				.menu {
+					padding-top: 10px;
+				}
+			}
+		}
+
+		&_wrapper {
+			background: rgba(0,0,0,.9);
+			padding-top: 90px;
+			padding-bottom: @spaced*2;
+		}
+
+		.menu {
+
+			padding: 0;
+			padding-top: 0;
+			margin: 0;
+			.transition();
+			
+			&-item {
+				.font_size(24);
+				margin: 0;
+				a {
+					color: @white;
+				}
+				&:before {
+					display: none;
+				}
+			}
+		}
+
+	}
+
+}

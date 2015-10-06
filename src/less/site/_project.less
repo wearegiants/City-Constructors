@@ -1,0 +1,76 @@
+.project {
+
+   &-content {
+      @media @min {
+         background: transparent;
+      }
+      @media @tablet {
+         background: @bgGray;
+      }
+   }
+
+   &-header {
+
+      @media @min {
+         min-height: 400px;
+         margin: 0 -@spaced;
+
+      }
+
+      @media @tablet {
+         min-height: 700px; 
+         margin: 0;        
+      }
+
+      @media @desktop {
+         min-height: 900px;         
+      }
+      
+      a, p {
+         color: @white;
+      }
+
+      p {
+         margin-top: 0;
+      }
+
+      
+      &__content {
+         position: relative;
+         z-index: 10;
+         @media @min {
+            padding: 0 @spaced;        
+         }
+         @media @tablet {
+            padding: 0;
+         }
+         
+      }
+
+      &__title {
+         color: @white;
+         margin-bottom: 0;
+      }
+
+   }
+
+   &-details {
+
+      margin-bottom: 0;
+      padding: 0;
+
+      li {
+         
+         margin: 0;
+         border-top: 1px solid @black25;
+         padding: 5px 0;
+
+         &:before {
+            display: none;
+         }
+
+      }
+
+   }
+
+}

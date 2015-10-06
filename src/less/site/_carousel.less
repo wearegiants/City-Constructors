@@ -1,0 +1,62 @@
+.carousel {
+
+   &-header {
+      position: absolute;
+      z-index: 20;
+      width: 100%;
+      color: @white;
+      padding: @spaced 0;
+
+      a {
+         color: inherit;
+      }
+
+      &__logo {
+         background: url('/assets/img/cc_logo.svg');
+         background-size: contain;
+         background-position: center left;
+         background-repeat: no-repeat;
+         text-indent: -9999px;
+         width: 100%;
+      }
+
+   }
+
+   &-slide {
+
+      background: @lighterGray;
+      position: relative;
+
+      @media @min {
+         height: 565px;
+      }
+
+      @media @desktop {
+         height: 650px;
+      }
+
+      &__meta {
+         position: absolute;
+         bottom: 0;
+         left: 0;
+         width: 100%;
+         z-index: 9;
+         color: @white;
+         a {
+            color: inherit;
+         }
+         .emphasized {
+            @media @min {
+               .font_size(26);
+            }
+
+            @media @tablet {
+               .font_size(36);
+            }
+            
+         }
+      }
+
+   }
+
+}
