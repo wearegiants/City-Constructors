@@ -1,1 +1,2 @@
-<link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'>
+<script src="https://use.typekit.net/heg5vcj.js"></script>
+<script>try{Typekit.load({ async: true });}catch(e){}</script>

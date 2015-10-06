@@ -95,7 +95,7 @@ img.rounded {
   outline: none;
 }
 body {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "franklin-gothic-urw", sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   color: #666666;
@@ -120,7 +120,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "franklin-gothic-urw", sans-serif;
   font-weight: 700;
   color: #404040;
   line-height: inherit;
