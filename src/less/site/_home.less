@@ -2,7 +2,16 @@
 
   &-mission {
 
-    .font_size(30);
+    @media @min {
+      .font_size(20);
+    }
+    @media @tablet {
+      .font_size(22);
+    }
+    @media @desktop {
+      .font_size(30);  
+    }
+    
 
     .carousel {
 
