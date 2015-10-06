@@ -18,17 +18,6 @@ if ( get_sub_field('display') == "wide" )    { $width = 'fs-cell fs-lg-12 fs-md-
 
 ?>
 
-<div class="<?php echo $width; ?>">
-  <?php $class = $post->post_name; ?>
-  <div <?php post_class('project project-'.$class.''); ?>>
-    <a href="<?php the_permalink(); ?>" class="coverlink"></a>
-    <div class="project-meta wrapper cover">
-      <h3 class="project-title"><?php the_title(); ?></h3>
-      <span>Category</span>
-    </div>
-    <div class="project-meta wrapper bottom">View Project</div>
-    <div class="project-image <?php echo $class; echo ' '; echo $height; ?> background" data-background-options='{"source":"<?php echo $thumb_url; ?>"}'></div>
-  </div>
-</div>
+<?php include locate_template('parts/project-small.php' ); ?>
 
 <?php wp_reset_postdata(); endif; endwhile; endif; ?>

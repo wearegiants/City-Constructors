@@ -1,5 +1,11 @@
 .project {
 
+   &-wrapper {
+      overflow: hidden;
+   }
+
+   // overflow-x: hidden;
+
    &-content {
       @media @min {
          background: transparent;
@@ -64,6 +70,14 @@
          margin: 0;
          border-top: 1px solid @black25;
          padding: 5px 0;
+         .font_size(12);
+
+         .label {
+
+         }
+         .value {
+            //text-align: right;
+         }
 
          &:before {
             display: none;

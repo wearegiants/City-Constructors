@@ -1,3 +1,4 @@
+<div class="fs-row">
 <?php
 
    $related = get_posts( 
@@ -12,8 +13,14 @@
    if( $related ) foreach( $related as $post ) {
    setup_postdata($post); 
 
+
+   $thumb_id = get_post_thumbnail_id();
+   $thumb_url_array = wp_get_attachment_image_src($thumb_id, 'thumbnail-size', true);
+   $thumb_url = $thumb_url_array[0];
+
 ?>
 
-<?php include locate_template('parts/project-related-item.php' ); ?>
+<?php include locate_template('parts/project-small.php' ); ?>
 
 <?php } wp_reset_postdata(); ?>
+</div>

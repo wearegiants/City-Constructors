@@ -1027,6 +1027,9 @@ form input[type=search].btn-success.btn-default {
   color: #999999;
   cursor: pointer;
 }
+.project-wrapper {
+  overflow: hidden;
+}
 @media screen and (min-width: 300px) {
   .project-content {
     background: transparent;
@@ -1087,6 +1090,8 @@ form input[type=search].btn-success.btn-default {
   margin: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.25);
   padding: 5px 0;
+  font-size: 12px;
+  font-size: 0.75rem;
 }
 .project-details li:before {
   display: none;

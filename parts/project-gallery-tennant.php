@@ -1,5 +1,5 @@
 <div class="fs-row">
-<div class="gallery">
+<div class="gallery packed">
 <?php $images = get_field('project_gallery'); if( $images ): ?>
 <?php foreach( $images as $image ): ?>
 

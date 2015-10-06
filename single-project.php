@@ -2,7 +2,7 @@
 
 <?php if (!is_single(232)): ?>
 
-<div class="project">
+<div class="project-wrapper">
 <div class="fs-row">
 
   <?php 
@@ -42,10 +42,14 @@
     <div class="section">
     <p>Specifications</p>
     <ul class="project-details">
-      <li><span>Size</span><span class="right">289,000 SF</span></li>
-      <li><span>Size</span><span class="right">289,000 SF</span></li>
-      <li><span>Size</span><span class="right">289,000 SF</span></li>
-      <li><span>Size</span><span class="right">289,000 SF</span></li>
+      <?php if( have_rows('project_details') ): ?>
+      <?php while ( have_rows('project_details') ) : the_row(); ?>
+      <li class="fs-row">
+        <div class="label fs-cell fs-xl-5 fs-lg-5 fs-md-6 fs-sm-1"><?php the_sub_field('label'); ?></div>
+        <div class="value fs-cell fs-xl-7 fs-lg-7 fs-md-6 fs-sm-2"><?php the_sub_field('value'); ?></div>
+      </li>
+      <?php endwhile; ?>
+      <?php endif; ?>
     </ul>
     </div>
     <!-- /Project Details -->

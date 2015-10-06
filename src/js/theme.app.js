@@ -29,7 +29,7 @@ function mobileMenu(){
 }
 
 function galleryPackery(){
-  var $container = $('.gallery');
+  var $container = $('.gallery.packed');
 // init
   $container.packery({
     itemSelector: '.packed',
