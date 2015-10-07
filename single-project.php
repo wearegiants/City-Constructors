@@ -66,10 +66,16 @@
   </div>
 
   <?php if (get_field('enable_before_gallery')): ?>
-  <?php include locate_template('parts/project-gallery-extra.php' ); ?>
-  <?php else: ?>
-  <?php include locate_template('parts/project-gallery.php' ); ?>
+  <div class="carousel">
   <?php endif; ?> 
+
+  <?php include locate_template('parts/project-gallery.php' ); ?>
+
+  <?php if (get_field('enable_before_gallery')): ?>
+  <?php include locate_template('parts/project-gallery-extra.php' ); ?>
+  </div>
+  <?php endif; ?> 
+  
 
   <div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-centered">
   <div class="section section-compact">
