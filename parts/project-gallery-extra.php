@@ -1,7 +1,7 @@
 <div class="slide">
   <div class="fs-row">
     <div class="fs-cell fs-lg-1 fs-md-1 fs-sm-hide">
-      <div class="gallery-item__bg tall gallery-item__next"><span class="rotate-45">Next</span></div>
+      <div class="gallery-item__bg tall gallery-item__next"><span class="rotate-45">After</span></div>
     </div>
     <div class="fs-cell fs-lg-11 fs-md-5 fs-sm-3">
       <div class="fs-row">
