@@ -64,6 +64,19 @@
     &.darken {
       background: darken(@bgGray, 2%);
     }
+    &.wwd {
+      @media @tablet {
+        background-position: 800px 0px;
+      }
+      @media @desktop {
+        background-image: url('/assets/img/white.png');
+        background-repeat: repeat-y;
+        background-position: 640px 0px;
+      }
+      @media @max {
+        background-position: 800px 0px;
+      }
+    }
   }
   &--black {
     background: @black;

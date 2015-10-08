@@ -17,6 +17,26 @@
 .bg-color--grey.darken {
   background: #f0f0f0;
 }
+@media screen and (min-width: 740px) {
+  .bg-color--gray.wwd,
+  .bg-color--grey.wwd {
+    background-position: 800px 0px;
+  }
+}
+@media screen and (min-width: 980px) {
+  .bg-color--gray.wwd,
+  .bg-color--grey.wwd {
+    background-image: url('/assets/img/white.png');
+    background-repeat: repeat-y;
+    background-position: 640px 0px;
+  }
+}
+@media screen and (min-width: 1220px) {
+  .bg-color--gray.wwd,
+  .bg-color--grey.wwd {
+    background-position: 800px 0px;
+  }
+}
 .bg-color--black {
   background: #333333;
   color: #ffffff;
