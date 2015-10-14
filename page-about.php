@@ -1,4 +1,4 @@
-<?php Themewrangler::setup_page();get_header(/***Template Name: About */); ?>
+<?php Themewrangler::setup_page();get_header(/***Template Name: Who We Are */); ?>
 
 <?php include locate_template('parts/page-header.php' );?>
 
