@@ -2,7 +2,7 @@
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" ng-app="myapp"> <!--<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
 <head>
 <meta charset="utf-8">
 <title><?php bloginfo( 'sitename' ) ?></title>
@@ -25,7 +25,7 @@
 
 </head>
 
-<body class="fs-grid">
+<body <?php post_class('fs-grid fs-grid-fluid'); ?>>
 <div id="wrapper">
 
 <?php if(is_front_page()): include_once locate_template('parts/home-carousel.php' ); endif; ?>
@@ -53,4 +53,4 @@
   </div>
 </header>
 
-<div id="content-wrapper" class='fs-grid'>
+<div id="content-wrapper" class='fs-grid fs-grid-fluid'>

@@ -107,6 +107,7 @@ $(document).ready(function(){
     });
   });
   $(".share-toggle").swap();
+  $(".mailing-toggle").swap();
   galleryPackery();
   carousel();
   smoothscroll();

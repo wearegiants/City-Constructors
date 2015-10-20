@@ -1,2 +1,1 @@
-<script src="https://use.typekit.net/heg5vcj.js"></script>
-<script>try{Typekit.load({ async: true });}catch(e){}</script>
+<script type="text/javascript" src="http://fast.fonts.net/jsapi/44614932-4cf3-4af4-9979-13aedcba91fe.js"></script>

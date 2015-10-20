@@ -1,8 +1,19 @@
 </div>
 
+<div class="fs-row">
+  <div class="fs-cell fs-all-full">
+    <div id="mailing-list">
+      <div class="fs-row">
+        <div class="fs-cell fs-all-full text-right"><a href="#" data-swap-target="#mailing-list" class="mailing-toggle ss-gizmo ss-delete"></a></div>
+        <div class="fs-cell fs-all-full text-center">Content Goes Here</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer id="footer">
   <div class="fs-row">
-    <div class="fs-cell fs-full-all bg-color--gray darken">
+    <div class="fs-cell fs-full-all bg-color--gray darken interior">
       <div class="fs-row">
         <div class='fs-cell fs-lg-10 fs-md-6 f0s-sm-3 fs-centered'>
           <div class="section">

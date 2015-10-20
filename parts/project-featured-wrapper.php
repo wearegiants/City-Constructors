@@ -1,4 +1,4 @@
-<div class="fs-cell fs-lg-4 fs-md-2 fs-sm-3">
+<div class="packed fs-cell <?php echo $width; ?>">
   <?php $class = $post->post_name; ?>
   <div <?php post_class('project project-'.$class.''); ?>>
     <a href="<?php the_permalink(); ?>" class="coverlink"></a>
@@ -7,6 +7,6 @@
       <?php echo get_the_category_list(); ?>
     </div>
     <div class="project-meta wrapper bottom">View Project</div>
-    <div class="project-image background" data-background-options='{"source":"<?php echo $thumb_url; ?>"}'></div>
+    <div class="project-image background <?php echo $height; ?>" data-background-options='{"source":"<?php echo $thumb_url; ?>"}'></div>
   </div>
 </div>

@@ -38,7 +38,7 @@
       <a href="#" class="selected">All Projects</a>
       <a href="#">Mixed Use</a>
     </header>
-    <div class="fs-row">
+    <div class="fs-row gallery packed">
       <?php include locate_template('parts/projects-all.php' ); ?>
     </div>
   </div>  

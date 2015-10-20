@@ -33,14 +33,52 @@
 
     &.bottom {
       bottom: 0;
-      ///opacity: 0;
+      opacity: 0;
     }
 
+    .post-categories {
+      padding: 0;
+      li {
+        
+        display: inline-block;
+        color: @white75;
+
+        a {
+          color: inherit;
+        }
+        
+        &:before {
+          display: none;
+        }
+
+        &:after {
+          content: ', '
+        }
+
+        &:last-child {
+          &:after {
+            content: '';
+          }
+        }
+
+      }
+    }
 
 
   }
 
   &-image {
+
+    &:before {
+      content: '';
+      display: block;
+      .cover();
+      z-index: 1;
+      background: url('/assets/img/gradient-project.png');
+      background-size: cover;
+      opacity: .5
+    }
+
     @media @min {
       height: 130px;
       margin-bottom: @height/2;
@@ -96,6 +134,16 @@
     &_subtitle {
       color: @white;
       margin: 0;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      .cover();
+      background: url('/assets/img/gradient-project.png');
+      background-size: cover;
+      z-index: 1;
+      opacity: .5;
     }
 
   }

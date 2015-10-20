@@ -1,9 +1,13 @@
 <div class="slide">
   <div class="fs-row">
+    <?php if (get_field('enable_before_gallery')): ?>
     <div class="fs-cell fs-lg-1 fs-md-1 fs-sm-hide fs-right">
       <div class="gallery-item__bg tall gallery-item__next"><span class="rotate-45">Before</span></div>
     </div>
     <div class="fs-cell fs-lg-11 fs-md-5 fs-sm-3">
+    <?php else: ?>
+    <div class="fs-cell all-full">
+    <?php endif; ?>
       <div class="fs-row">
         <div class="gallery packed">
           <?php $images = get_field('project_gallery'); if( $images ): ?>

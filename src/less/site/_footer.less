@@ -52,3 +52,27 @@
   }
 
 }
+
+
+body {
+  
+  &.page,&.type-project {
+    
+    #footer {
+
+      position: relative;
+      z-index: 0;
+
+      @footerspace : @spaced*4;
+  
+
+      .interior {
+        margin-top: -@footerspace;
+        padding-top: @footerspace;
+      }
+    
+    }
+  
+  }
+
+}

@@ -18,6 +18,6 @@ if ( get_sub_field('display') == "wide" )    { $width = 'fs-cell fs-lg-12 fs-md-
 
 ?>
 
-<?php include locate_template('parts/project-small.php' ); ?>
+<?php include locate_template('parts/project-featured-wrapper.php' ); ?>
 
 <?php wp_reset_postdata(); endif; endwhile; endif; ?>
