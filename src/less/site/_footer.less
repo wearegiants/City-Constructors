@@ -11,6 +11,13 @@
   .font_size(14);
   line-height: 1.8;
 
+  a {
+    color: inherit;
+    &:hover {
+      color: darken(@textGray, 10%)
+    }
+  }
+
   .menu {
     padding: 0;
 
@@ -71,6 +78,15 @@ body {
         padding-top: @footerspace;
       }
     
+    }
+
+    &.post-12 {
+      #footer {
+        .interior {
+          margin-top: 0;
+          padding-top: 0;
+        }
+      }
     }
   
   }

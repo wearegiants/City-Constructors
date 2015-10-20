@@ -1,4 +1,6 @@
 <div class="fs-row">
+<div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-centered">
+<div class="fs-row">
 <?php
 
    $related = get_posts( 
@@ -23,4 +25,6 @@
 <?php include locate_template('parts/project-small.php' ); ?>
 
 <?php } wp_reset_postdata(); ?>
+</div>
+</div>
 </div>

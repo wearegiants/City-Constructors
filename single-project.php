@@ -18,7 +18,7 @@
           <div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-centered">
             <h1 class="project-header__title"><?php the_title(); ?></h1>
             <p class="emphasized"><?php echo get_the_excerpt(); ?></p>
-            <a href="#project-content" class="ss-gizmo ss-navigatedown btn btn-first btn-icon">More Info</a>
+            <a href="#project-content" class="ss-gizmo ss-navigatedown btn btn-first btn-icon right">More Info</a>
           </div>
         </div>
       </div>
@@ -65,6 +65,7 @@
   </div>
   </div>
 
+  <div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-centered">
   <?php if (get_field('enable_before_gallery')): ?>
   <div class="carousel">
   <?php endif; ?> 
@@ -75,8 +76,10 @@
   <?php include locate_template('parts/project-gallery-extra.php' ); ?>
   </div>
   <?php endif; ?> 
+  </div>
   
 
+  <div class="related-projects">
   <div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-centered">
   <div class="section section-compact">
   Similar Projects
@@ -88,6 +91,7 @@
   <?php else: ?>
   <?php include locate_template('parts/project-related.php' ); ?>
   <?php endif; ?> 
+  </div>
 
 </div>
 </div>

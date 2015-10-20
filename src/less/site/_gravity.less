@@ -1,7 +1,19 @@
 .gform {
 
+  &_footer {
+    .font_size(16);
+    .button {
+      color: @red!important;
+      width: auto;
+      background: none;
+      border: 1px solid @red;
+      font-weight: 400;
+    }
+  }
+
   &_wrapper {
 
+    .font_size(16);
     background: @white;
     padding: @spaced/1.5;
     margin: 0;
@@ -16,9 +28,24 @@
       }
       .ginput_container {
         margin-top: 0!important;
+        padding-bottom: 10px;
+        height: auto;
+        br {
+          display: none!important;
+        }
+        span {
+          display: block;
+          height: auto;
+          label {
+            display: none!important;
+          }
+        }
+        label {
+          display: none!important;
+        }
       }
       span {
-        height: auto;
+        height: auto!important;
       }
       input,textarea {
         width: 100%;

@@ -3,13 +3,21 @@
    &-wrapper {
       overflow: hidden;
       @media @desktop {
-         padding-top: 10px;
+         //padding-top: 10px;
       }
    }
 
    // overflow-x: hidden;
 
    &-content {
+      
+      .font_size(16);
+      line-height: 1.7;
+
+      p {
+         line-height: inherit;
+      }
+
       @media @min {
          background: transparent;
       }
@@ -20,9 +28,19 @@
 
    &-header {
 
+      &:before {
+         content: '';
+         display: block;
+         .cover();
+         background: url('/assets/img/gradient-project.png');
+         background-size: cover;
+         z-index: 8;
+         opacity: .6
+      }
+
       @media @min {
          min-height: 400px;
-         margin: 0 -@spaced;
+         margin: 0 -@spaced*2;
 
       }
 
@@ -54,12 +72,21 @@
          @media @tablet {
             padding: 0;
          }
+         @media @desktop {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            .center();
+            margin-top: @spaced*2;
+         }
          
       }
 
       &__title {
          color: @white;
          margin-bottom: 0;
+         .font_size(48);
+         font-weight: 300;
       }
 
    }
@@ -88,6 +115,16 @@
          }
 
       }
+
+   }
+
+   
+   @footerspace : 0;
+
+   .related-projects {
+      margin-top: -@footerspace;
+      padding-top: @footerspace;
+      background: darken(@bgGray, 2%);
 
    }
 

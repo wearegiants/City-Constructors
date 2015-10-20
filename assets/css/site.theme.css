@@ -120,7 +120,7 @@ img.rounded {
 }
 body {
   font-family: 'Neuzeit S LT W01 Book';
-  font-weight: 400;
+  font-weight: 300;
   -webkit-font-smoothing: antialiased;
   color: #555555;
   line-height: 1.5;
@@ -759,6 +759,8 @@ form input[type=search].btn-success.btn-default {
 .mfp-slide .mfp-content .page-content {
   background: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  font-size: 16px;
+  font-size: 1rem;
   float: right;
   -webkit-transition: 300ms ease;
           transition: 300ms ease;
@@ -779,7 +781,7 @@ form input[type=search].btn-success.btn-default {
 }
 @media screen and (min-width: 980px) {
   .mfp-slide .mfp-content .page-content {
-    width: 50%;
+    width: 600px;
   }
 }
 .mfp-slide .mfp-content .page-content_image {
@@ -908,6 +910,7 @@ html {
 #header .menu {
   padding: 0;
   margin: 0;
+  padding-top: 25px;
 }
 #header .menu li {
   display: inline-block;
@@ -921,6 +924,9 @@ html {
 }
 #header .menu li:last-child a {
   padding-right: 0;
+}
+#header.home .menu {
+  padding-top: 0;
 }
 .entry {
   margin-bottom: 25px;
@@ -1090,10 +1096,13 @@ html {
 .project-wrapper {
   overflow: hidden;
 }
-@media screen and (min-width: 980px) {
-  .project-wrapper {
-    padding-top: 10px;
-  }
+.project-content {
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.project-content p {
+  line-height: inherit;
 }
 @media screen and (min-width: 300px) {
   .project-content {
@@ -1105,10 +1114,23 @@ html {
     background: #f5f5f5;
   }
 }
+.project-header:before {
+  content: '';
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: url('/assets/img/gradient-project.png');
+  background-size: cover;
+  z-index: 8;
+  opacity: 0.6;
+}
 @media screen and (min-width: 300px) {
   .project-header {
     min-height: 400px;
-    margin: 0 -25px;
+    margin: 0 -50px;
   }
 }
 @media screen and (min-width: 740px) {
@@ -1143,9 +1165,25 @@ html {
     padding: 0;
   }
 }
+@media screen and (min-width: 980px) {
+  .project-header__content {
+    bottom: 0;
+    width: 100%;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    margin-top: 50px;
+  }
+}
 .project-header__title {
   color: #fff;
   margin-bottom: 0;
+  font-size: 48px;
+  font-size: 3rem;
+  font-weight: 300;
 }
 .project-details {
   margin-bottom: 0;
@@ -1160,6 +1198,11 @@ html {
 }
 .project-details li:before {
   display: none;
+}
+.project .related-projects {
+  margin-top: 0;
+  padding-top: 0;
+  background: #f0f0f0;
 }
 @media screen and (min-width: 300px) {
   .gallery-item {
@@ -1300,6 +1343,10 @@ html {
     line-height: 1.4;
   }
 }
+.bio {
+  font-size: 16px;
+  font-size: 1rem;
+}
 .bio-primary_image {
   position: relative;
 }
@@ -1344,6 +1391,8 @@ html {
 .project-title {
   color: #fff;
   margin: 0;
+  font-weight: 300;
+  line-height: 1;
 }
 .project-meta {
   position: absolute;
@@ -1456,6 +1505,10 @@ html {
 .project-featured_subtitle {
   color: #fff;
   margin: 0;
+  font-weight: 300;
+}
+.project-featured span.project-featured_subtitle {
+  color: rgba(255, 255, 255, 0.75);
 }
 .project-featured:before {
   content: '';
@@ -1615,6 +1668,12 @@ html {
     background: none;
   }
 }
+#footer a {
+  color: inherit;
+}
+#footer a:hover {
+  color: #3b3b3b;
+}
 #footer .menu {
   padding: 0;
 }
@@ -1661,6 +1720,11 @@ body.page #footer .interior,
 body.type-project #footer .interior {
   margin-top: -100px;
   padding-top: 100px;
+}
+body.page.post-12 #footer .interior,
+body.type-project.post-12 #footer .interior {
+  margin-top: 0;
+  padding-top: 0;
 }
 @media screen and (min-width: 300px) {
   #home-mission {
@@ -1729,7 +1793,20 @@ body.type-project #footer .interior {
       -ms-transform: translate(75px, -50%);
           transform: translate(75px, -50%);
 }
+.gform_footer {
+  font-size: 16px;
+  font-size: 1rem;
+}
+.gform_footer .button {
+  color: #D6362D !important;
+  width: auto;
+  background: none;
+  border: 1px solid #D6362D;
+  font-weight: 400;
+}
 .gform_wrapper {
+  font-size: 16px;
+  font-size: 1rem;
   background: #fff;
   padding: 16.66666667px;
   margin: 0;
@@ -1746,9 +1823,24 @@ body.type-project #footer .interior {
 }
 .gform_wrapper li .ginput_container {
   margin-top: 0!important;
+  padding-bottom: 10px;
+  height: auto;
+}
+.gform_wrapper li .ginput_container br {
+  display: none!important;
+}
+.gform_wrapper li .ginput_container span {
+  display: block;
+  height: auto;
+}
+.gform_wrapper li .ginput_container span label {
+  display: none!important;
+}
+.gform_wrapper li .ginput_container label {
+  display: none!important;
 }
 .gform_wrapper li span {
-  height: auto;
+  height: auto!important;
 }
 .gform_wrapper li input,
 .gform_wrapper li textarea {
