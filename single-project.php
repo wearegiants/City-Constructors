@@ -67,7 +67,7 @@
 
   <div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-centered">
   <?php if (get_field('enable_before_gallery')): ?>
-  <div class="carousel">
+  <div class="carousel" data-carousel-options='{"controls":false,"pagination":false}'>
   <?php endif; ?> 
 
   <?php include locate_template('parts/project-gallery.php' ); ?>
@@ -102,5 +102,12 @@
 <?php include locate_template('parts/project-tennant.php' ); ?>
 
 <?php endif; ?>
+
+<script>
+  $(document).ready(function(){
+    $('.gallery-item__next').on('click', function(){ $(".carousel").carousel("next"); });
+    $('.gallery-item__prev').on('click', function(){ $(".carousel").carousel("previous"); });
+  });
+</script>
 
 <?php get_footer(); ?>

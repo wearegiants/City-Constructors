@@ -12,14 +12,19 @@
          margin-bottom: @spacer;
       }
 
-      &__next {
+      &__next, &__prev {
 
-         background: @bgGray;
+         background-color: @bgGray;
          .transition();
          position: relative;
+         text-indent: -9999px;
+         background-position: center center;
+         background-repeat: no-repeat;
+         background-size: 20% auto;
+         cursor: pointer;
          
          &:hover {
-            background: @lighterGray;
+            background-color: @lighterGray;
          }
 
          span {
@@ -28,6 +33,14 @@
             transform: rotate(90deg);
             transform-origin: 50% 50%;
          }
+      }
+
+      &__next {
+         background-image: url('/assets/img/before.svg');
+      }
+
+      &__prev {
+         background-image: url('/assets/img/after.svg');
       }
 
       &__bg {
