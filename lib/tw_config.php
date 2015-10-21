@@ -46,4 +46,4 @@ if (!is_admin()) add_action("wp_enqueue_scripts", "my_jquery_enqueue", 11);
     // Return modified body class array
     return $wp_classes;
 }
-add_filter( 'post_class', 'removeClasses', 10, 2 );
+add_filter( 'body_class', 'removeClasses', 10, 2 );

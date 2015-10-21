@@ -25,7 +25,7 @@
 
 </head>
 
-<body <?php post_class('fs-grid fs-grid-fluid'); ?>>
+<body <?php body_class('fs-grid fs-grid-fluid'); ?>>
 <div id="wrapper">
 
 <?php if(is_front_page()): include_once locate_template('parts/home-carousel.php' ); endif; ?>

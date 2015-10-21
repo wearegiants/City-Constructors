@@ -1716,19 +1716,19 @@ html {
   }
 }
 body.page #footer,
-body.type-project #footer {
+body.single-project #footer {
   position: relative;
   z-index: 0;
 }
 body.page #footer .interior,
-body.type-project #footer .interior {
+body.single-project #footer .interior {
   margin-top: -100px;
   padding-top: 100px;
 }
-body.page.post-12 #footer .interior,
-body.type-project.post-12 #footer .interior,
-body.page.post-21 #footer .interior,
-body.type-project.post-21 #footer .interior {
+body.page.page-id-12 #footer .interior,
+body.single-project.page-id-12 #footer .interior,
+body.page.page-id-21 #footer .interior,
+body.single-project.page-id-21 #footer .interior {
   margin-top: 0;
   padding-top: 0;
 }
