@@ -40,7 +40,7 @@
       -->
     </header>
     
-    <div class="fs-row gallery isotoped">
+    <div class="fs-row gallery packed">
       <?php include locate_template('parts/projects-all.php' ); ?>
     </div>
   </div>  

@@ -45,9 +45,9 @@ function galleryPackery(){
     gutter: 0,
     layoutMode: 'packery',
       packery: {
-      gutter: 0
-    },
-  });
+        gutter: 0
+      },
+    });
 }
 
 function smoothscroll(){

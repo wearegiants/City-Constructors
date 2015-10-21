@@ -331,6 +331,13 @@ form input[type=submit].btn-first,
 form input[type=search].btn-first {
   padding-left: 0;
 }
+form input[type=submit]-fullwidth,
+form input[type=search]-fullwidth {
+  width: 100%;
+  text-align: left;
+  border-top: 1px solid #E7E7EC;
+  margin-bottom: 0;
+}
 form input[type=submit]-hamburg,
 form input[type=search]-hamburg {
   position: relative;
@@ -533,6 +540,13 @@ form input[type=search].btn-success.btn-default {
 .btn.btn-first,
 #header .menu li.btn-first {
   padding-left: 0;
+}
+.btn-fullwidth,
+#header .menu li-fullwidth {
+  width: 100%;
+  text-align: left;
+  border-top: 1px solid #E7E7EC;
+  margin-bottom: 0;
 }
 .btn-hamburg,
 #header .menu li-hamburg {
@@ -839,10 +853,6 @@ html {
 }
 .section-chin {
   padding: 25px 0 50px;
-}
-.section .title,
-.section-title {
-  margin-bottom: 0;
 }
 .section .title span,
 .section-title span {
@@ -1900,6 +1910,9 @@ body.single-project.page-id-21 #footer .interior {
 .gform_wrapper li textarea:focus {
   border: none;
   border-bottom: 1px solid #d9d9e1;
+}
+#gform_wrapper_1 {
+  margin-top: 0;
 }
 #mailing-list {
   height: 0px;
