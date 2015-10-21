@@ -1506,9 +1506,13 @@ html {
   color: #fff;
   margin: 0;
   font-weight: 300;
+  font-size: 28px;
+  font-size: 1.75rem;
 }
 .project-featured span.project-featured_subtitle {
   color: rgba(255, 255, 255, 0.75);
+  font-size: 18px;
+  font-size: 1.125rem;
 }
 .project-featured:before {
   content: '';
@@ -1722,7 +1726,9 @@ body.type-project #footer .interior {
   padding-top: 100px;
 }
 body.page.post-12 #footer .interior,
-body.type-project.post-12 #footer .interior {
+body.type-project.post-12 #footer .interior,
+body.page.post-21 #footer .interior,
+body.type-project.post-21 #footer .interior {
   margin-top: 0;
   padding-top: 0;
 }
@@ -1758,8 +1764,8 @@ body.type-project.post-12 #footer .interior {
 }
 @media screen and (min-width: 980px) {
   #home-quotes blockquote {
-    font-size: 28px;
-    font-size: 1.75rem;
+    font-size: 20px;
+    font-size: 1.25rem;
   }
 }
 #home-quotes .fs-carousel-pagination {
@@ -1768,6 +1774,24 @@ body.type-project.post-12 #footer .interior {
 .press-title {
   margin-bottom: 0;
   font-weight: 300;
+}
+#press .fs-carousel-control {
+  background: transparent!important;
+  box-shadow: none;
+}
+#press .fs-carousel-control_next {
+  right: 0;
+}
+#press .fs-carousel-control_next:before {
+  border-left-color: #fff;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+}
+#press .fs-carousel-control_previous {
+  left: 0;
+}
+#press .fs-carousel-control_previous:before {
+  border-right-color: #fff;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
 }
 .cp-item {
   padding-bottom: 25px;
@@ -1864,6 +1888,8 @@ body.type-project.post-12 #footer .interior {
   overflow: hidden;
   background: #333;
   color: #fff;
+  position: relative;
+  z-index: 9;
   -webkit-transition: height 300ms ease;
           transition: height 300ms ease;
 }
@@ -1871,5 +1897,46 @@ body.type-project.post-12 #footer .interior {
   color: #fff;
 }
 #mailing-list.fs-swap-active {
-  height: 200px;
+  height: 180px;
+}
+#mailing-list .gform_wrapper {
+  background: none;
+  padding: 0;
+  min-width: 100%;
+}
+#mailing-list .gform_confirmation_wrapper {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 100%;
+}
+#mailing-list .gform_button {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff !important;
+}
+#mailing-list .gform_button:hover {
+  border-color: #fff;
+}
+#mailing-list .gform_footer {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  text-align: right;
+}
+#mailing-list .gform_footer .button {
+  margin-bottom: 0;
+}
+#mailing-list .gform_fields li {
+  margin: 0;
+}
+#mailing-list .gform_fields .ginput_container {
+  padding-bottom: 0;
+}
+#mailing-list .gform_fields .ginput_container input {
+  background: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff !important;
 }

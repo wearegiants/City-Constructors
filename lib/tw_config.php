@@ -9,7 +9,7 @@ $settings = array(
   ),
 
   'default_scripts'        => array(
-    'jquery-g',
+    //'jquery-g',
     'plugins',
     'scripts',
   ),
@@ -24,6 +24,26 @@ $settings = array(
     'theme',
   ),
 
+  'deregister_scripts' => array('','l10n'),
+
 );
 
 Themewrangler::set_defaults( $settings );
+
+
+if (!is_admin()) add_action("wp_enqueue_scripts", "my_jquery_enqueue", 11);
+ function my_jquery_enqueue() {
+    wp_deregister_script('jquery');
+    wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", array(), '1.0.0', false);
+    wp_enqueue_script('jquery');
+ }
+
+ function removeClasses( $wp_classes ) {
+    // The classes you wish to remove
+    $blacklist = array( 'project' );
+    // Remove classes from array
+    $wp_classes = array_diff( $wp_classes, $blacklist );
+    // Return modified body class array
+    return $wp_classes;
+}
+add_filter( 'post_class', 'removeClasses', 10, 2 );

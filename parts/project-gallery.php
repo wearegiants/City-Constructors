@@ -33,7 +33,7 @@
 
             
             <div class="gallery-item packed fs-cell fs-lg-4 fs-md-2 fs-sm-half">
-              <a class="gallery-zoom" href="<?php echo $image['url']; ?>" data-lightbox-gallery="gallery">
+              <a class="gallery-zoom" href="<?php echo $image['url']; ?>" data-lightbox-gallery="gallery" title="<?php echo $image['title']; ?>">
                 <span class="gallery-item__bg background section <?php echo $orient; ?>" data-background-options='{"source":"<?php echo $image['sizes']['large']; ?>"}'></span>
               </a>
             </div>

@@ -6,3 +6,30 @@
   }
 
 }
+
+#press {
+  .fs-carousel {
+
+    &-control {
+      background: transparent!important;
+      box-shadow: none;
+      &_next {
+        right: 0;
+        &:before {
+          //border-top-color: @white;
+          border-left-color: @white;
+          box-shadow: 0 0 @spaced @black50
+        }  
+      }
+      &_previous {
+        left: 0;
+        &:before {
+          //border-bottom-color: @white;
+          border-right-color: @white;
+          box-shadow: 0 0 @spaced @black50
+        }  
+      }
+    }
+
+  }
+}

@@ -4,6 +4,8 @@
   overflow: hidden;
   background: @black;
   color: @white;
+  position: relative;
+  z-index: 9;
   transition: height 300ms ease;
 
   a {
@@ -12,7 +14,50 @@
   
   &.fs-swap {
     &-active {
-      height: 200px;
+      height: 180px;
+    }
+  }
+
+  .gform {
+    &_wrapper {
+      background: none;
+      padding: 0;
+      min-width: 100%;
+    }
+    &_confirmation_wrapper {
+      .center();
+      width: 100%;
+    }
+    &_button {
+      border-color: @white50;
+      color: @white!important;
+      &:hover {
+        border-color: @white;
+      }
+    }
+    &_footer {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      text-align: right;
+      .button {
+        margin-bottom: 0;
+      }
+    }
+    &_fields {
+      li {
+        margin: 0;
+      }
+      .ginput {
+        &_container {
+          padding-bottom: 0;
+          input {
+            background: none;
+            border-bottom: 1px solid @white25;
+            color: @white!important;
+          }
+        }
+      }
     }
   }
 

@@ -74,4 +74,7 @@ function joints_related_posts() {
     wp_reset_postdata();
     //echo '</ul>';
 }
+
 ?>
+
+
