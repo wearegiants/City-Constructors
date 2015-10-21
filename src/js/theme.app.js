@@ -37,6 +37,19 @@ function galleryPackery(){
   });
 }
 
+function galleryPackery(){
+  var $isoContainer = $('.gallery.isotoped');
+// init
+  $isoContainer.packery({
+    itemSelector: '.packed',
+    gutter: 0,
+    layoutMode: 'packery',
+      packery: {
+      gutter: 0
+    },
+  });
+}
+
 function smoothscroll(){
   $(function() {
     $('a[href*=#]:not([href=#])').click(function() {

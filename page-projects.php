@@ -29,16 +29,18 @@
   </div>
 </div>
 
-<!-- Selected Personel -->
-
 <div class="fs-row">
   <div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-centered">
-    <header class="section compact">
-      <span>Filter:</span>
+    
+    <header class="section">
+      <h3 class="section-title"><span>All Projects</span></h3>
+      <!--
       <a href="#" class="selected">All Projects</a>
       <a href="#">Mixed Use</a>
+      -->
     </header>
-    <div class="fs-row gallery packed">
+    
+    <div class="fs-row gallery isotoped">
       <?php include locate_template('parts/projects-all.php' ); ?>
     </div>
   </div>  

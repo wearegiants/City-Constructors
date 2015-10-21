@@ -20,3 +20,4 @@
 // @codekit-prepend "../bower_components/imagesloaded/imagesloaded.pkgd.min.js"
 // @codekit-prepend "../bower_components/jquery.easing/js/jquery.easing.js"
 // @codekit-prepend "../bower_components/packery/dist/packery.pkgd.min.js"
+// @codekit-prepend "../bower_components/isotope/dist/isotope.pkgd.js"

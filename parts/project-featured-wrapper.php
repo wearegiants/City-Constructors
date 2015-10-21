@@ -1,7 +1,7 @@
-<div class="packed fs-cell <?php echo $width; ?>">
+<div class="packed fs-cell <?php echo $width; ?> alkali metal" data-category="alkali">
   <?php $class = $post->post_name; ?>
   <div <?php post_class('project project-'.$class.''); ?>>
-    <a href="<?php the_permalink(); ?>" class="coverlink"></a>
+    <!--<a href="<?php the_permalink(); ?>" class="coverlink"></a>-->
     <div class="project-meta wrapper cover">
       <h3 class="project-title"><?php the_title(); ?></h3>
       <?php echo get_the_category_list(); ?>
