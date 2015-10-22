@@ -10,14 +10,24 @@
 </div>
 
 <div class="carousel">
-  <div class="carousel-slide background" data-background-options='{"source":"/wp-content/uploads/2015/09/AKA-Hotel-2.jpg"}'>
+  <?php while ( have_rows('carousel') ) : the_row(); ?>
+
+  <?php 
+
+    $image = get_sub_field('background_image');
+
+  ?>
+
+  <div class="carousel-slide background" data-background-options='{"source":"<?php echo $image['sizes']['gallery-lg']; ?>"}'>
     <div class="carousel-slide__meta section section-compact">
       <div class="fs-row">
         <div class="fs-cell fs-lg-7 fs-md-5 fs-sm-3">
-          <p class="emphasized">Our mission is to construct the most eye-catching and notable spaces in Los Angeles.</p>
-          <small><a href="/projects/aka-hotel/">AKA Hotel</a></small>
+          <?php the_sub_field('carousel_content'); ?>
+          <!--<p class="emphasized">Our mission is to construct the most eye-catching and notable spaces in Los Angeles.</p>-->
+          <!--<<small><a href="/projects/aka-hotel/">AKA Hotel</a></small>-->
         </div>
       </div>
     </div>
   </div>
+<?php endwhile; ?>
 </div>
