@@ -74,8 +74,10 @@ body {
   
 
       .interior {
-        margin-top: -@footerspace;
-        padding-top: @footerspace;
+        @media @desktop {
+          margin-top: -@footerspace;
+          padding-top: @footerspace;  
+        }
       }
     
     }

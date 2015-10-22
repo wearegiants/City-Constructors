@@ -23,11 +23,12 @@
 
   ?>
 
-  <div class="project project-tennant-improvements packed fs-cell fs-all-half">
+  <div class="project project-tennant-improvements packed fs-cell fs-lg-half fs-md-6 fs-sm-3">
     <a href="<?php echo $image['url']; ?>" class="gallery-zoom coverlink" data-lightbox-gallery="gallery"></a>
     <div class="project-meta wrapper top cover">
-      <?php if($image['caption']): ?><span><?php echo $image['caption']; ?></span><?php endif; ?>
       <h3 class="project-title"><?php echo $image['title']; ?></h3>
+      <br>
+      <?php if($image['caption']): ?><span><?php echo $image['caption']; ?></span><?php endif; ?>
     </div>
     <div class="project-image <?php echo $orient; ?> background" data-background-options='{"source":"<?php echo $image['sizes']['large']; ?>"}'></div>
   </div>

@@ -218,9 +218,38 @@
     .project {
       &-image {
         margin-bottom: 0;
+        @media @min {
+          max-height: 200px;
+        }
+        @media @tablet {
+          max-height: 300px;
+        }
+        @media @desktop {
+          max-height: 1000px;
+        }
       }
       &-meta {
-        opacity: 0;
+        opacity: 1;
+        span {
+          opacity: 0;
+          .font_size(14);
+          display: block;
+          line-height: 1.5;
+          transition: 300ms ease;
+        }
+      }
+    }
+    &:hover {
+      .project-meta {
+        span {
+          @media @min {
+            opacity: 0;  
+          }
+          @media @tablet {
+            opacity: 1;
+          }
+          
+        }
       }
     }
   }

@@ -65,17 +65,39 @@
       background: darken(@bgGray, 2%);
     }
     &.wwd {
-      @media @tablet {
-        background-position: 800px 0px;
+      position: relative;
+      > * {
+        position: relative;
+        z-index: 1;
       }
-      @media @desktop {
-        background-image: url('/assets/img/white.png');
-        background-repeat: repeat-y;
-        background-position: 640px 0px;
+      &:after {
+        content: '';
+        display: block;
+        background: fade(@white, 60%);
+        z-index: 0;
+        width: 33%;
+        top: 0;
+        height: 100%;
+        right: 0;
+        position: absolute;
+        @media @min {
+          display: none;
+        }
+        @media @desktop {
+          display: block;
+        }
       }
-      @media @max {
-        background-position: 800px 0px;
-      }
+      // @media @tablet {
+      //   background-position: 800px 0px;
+      // }
+      // @media @desktop {
+      //   background-image: url('/assets/img/white.png');
+      //   background-repeat: repeat-y;
+      //   background-position: 640px 0px;
+      // }
+      // @media @max {
+      //   background-position: right -66% center;
+      // }
     }
   }
   &--black {

@@ -17,24 +17,37 @@
 .bg-color--grey.darken {
   background: #f0f0f0;
 }
-@media screen and (min-width: 740px) {
-  .bg-color--gray.wwd,
-  .bg-color--grey.wwd {
-    background-position: 800px 0px;
+.bg-color--gray.wwd,
+.bg-color--grey.wwd {
+  position: relative;
+}
+.bg-color--gray.wwd > *,
+.bg-color--grey.wwd > * {
+  position: relative;
+  z-index: 1;
+}
+.bg-color--gray.wwd:after,
+.bg-color--grey.wwd:after {
+  content: '';
+  display: block;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 0;
+  width: 33%;
+  top: 0;
+  height: 100%;
+  right: 0;
+  position: absolute;
+}
+@media screen and (min-width: 300px) {
+  .bg-color--gray.wwd:after,
+  .bg-color--grey.wwd:after {
+    display: none;
   }
 }
 @media screen and (min-width: 980px) {
-  .bg-color--gray.wwd,
-  .bg-color--grey.wwd {
-    background-image: url('/assets/img/white.png');
-    background-repeat: repeat-y;
-    background-position: 640px 0px;
-  }
-}
-@media screen and (min-width: 1220px) {
-  .bg-color--gray.wwd,
-  .bg-color--grey.wwd {
-    background-position: 800px 0px;
+  .bg-color--gray.wwd:after,
+  .bg-color--grey.wwd:after {
+    display: block;
   }
 }
 .bg-color--black {
@@ -882,6 +895,9 @@ html {
     display: block;
   }
 }
+#header-mobile {
+  text-align: right;
+}
 #header--logo {
   margin: 0;
   font-weight: 700;
@@ -891,7 +907,11 @@ html {
 }
 @media screen and (min-width: 300px) {
   #header--logo {
-    background: url('/assets/img/cci_logo.jpg') left center no-repeat;
+    background: url('/assets/img/cci-logo.svg') left center no-repeat;
+    background-size: auto 80%;
+  }
+  #header--logo.fs-swap-active {
+    background: url('/assets/img/cci-logo-white.svg') left center no-repeat;
     background-size: auto 80%;
   }
 }
@@ -1622,8 +1642,42 @@ html {
 .project-tennant-improvements .project-image {
   margin-bottom: 0;
 }
+@media screen and (min-width: 300px) {
+  .project-tennant-improvements .project-image {
+    max-height: 200px;
+  }
+}
+@media screen and (min-width: 740px) {
+  .project-tennant-improvements .project-image {
+    max-height: 300px;
+  }
+}
+@media screen and (min-width: 980px) {
+  .project-tennant-improvements .project-image {
+    max-height: 1000px;
+  }
+}
 .project-tennant-improvements .project-meta {
+  opacity: 1;
+}
+.project-tennant-improvements .project-meta span {
   opacity: 0;
+  font-size: 14px;
+  font-size: 0.875rem;
+  display: block;
+  line-height: 1.5;
+  -webkit-transition: 300ms ease;
+          transition: 300ms ease;
+}
+@media screen and (min-width: 300px) {
+  .project-tennant-improvements:hover .project-meta span {
+    opacity: 0;
+  }
+}
+@media screen and (min-width: 740px) {
+  .project-tennant-improvements:hover .project-meta span {
+    opacity: 1;
+  }
 }
 .widget {
   position: relative;
@@ -1748,10 +1802,12 @@ body.single-project #footer {
   position: relative;
   z-index: 0;
 }
-body.page #footer .interior,
-body.single-project #footer .interior {
-  margin-top: -100px;
-  padding-top: 100px;
+@media screen and (min-width: 980px) {
+  body.page #footer .interior,
+  body.single-project #footer .interior {
+    margin-top: -100px;
+    padding-top: 100px;
+  }
 }
 body.page.page-id-12 #footer .interior,
 body.single-project.page-id-12 #footer .interior,

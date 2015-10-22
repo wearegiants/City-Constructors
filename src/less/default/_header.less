@@ -19,13 +19,21 @@
     }
   }
 
+  &-mobile {
+    text-align: right;
+  }
+
   &--logo {
     margin: 0;
     font-weight: 700;
     color: @mainColor;
     @media @min {
-      background: url('/assets/img/cci_logo.jpg') left center no-repeat;
-      background-size: auto 80%;  
+      background: url('/assets/img/cci-logo.svg') left center no-repeat;
+      background-size: auto 80%;
+      &.fs-swap-active {
+        background: url('/assets/img/cci-logo-white.svg') left center no-repeat;
+        background-size: auto 80%;
+      }
     }
     @media @desktop {
       background: url('/assets/img/cci_logo.jpg') right center no-repeat;
