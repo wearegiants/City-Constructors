@@ -40,9 +40,9 @@
     </menu>
     <?php if(is_front_page()): ?>
     <menu id="header-social" class="fs-cell fs-lg-2 fs-md-hide fs-sm-hide text-right">
-      <a href="#" class="btn btn-nav ss-social ss-facebook"></a>
-      <a href="#" class="btn btn-nav ss-social ss-twitter"></a>
-      <a href="#" class="btn btn-nav ss-social ss-instagram"></a>
+      <a href="https://www.facebook.com/cciteam" class="btn btn-nav ss-social ss-facebook"></a>
+      <a href="https://www.linkedin.com/company/city-constructors-inc" class="btn btn-nav ss-social ss-linkedin"></a>
+      <a href="https://instagram.com/cciteam" class="btn btn-nav ss-social ss-instagram"></a>
     </menu>
     <?php endif; ?>
     <?php if(!is_front_page()): ?>
