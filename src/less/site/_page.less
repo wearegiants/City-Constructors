@@ -60,6 +60,13 @@
 				right: -7px;
 				left: auto;
 			}
+
+			&.text-left {
+				@media @min {
+					left: -7px;
+					right: auto;
+				}
+			}
 			
 			&.fs-swap {
 				&-active {
@@ -80,6 +87,7 @@
 						width: 150px;
 						&:after {
 							margin-left: 8px;
+							color: @darkblue;
 						}
 					}
 					&:last-child {

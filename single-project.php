@@ -51,7 +51,21 @@
       <?php endwhile; ?>
       <?php endif; ?>
     </ul>
+    <div class="page-share">
+      <span data-swap-target=".page-share--container" class="page-share--title ss-gizmo ss-share right share-toggle text-left">Share This</span>
+      <div class="page-share--container text-left">
+        <ul>
+          <li><a href="https://www.facebook.com/sharer/sharer.php?u=<?php bloginfo( 'siteurl' ) ?>/<?php the_permalink(); ?>" target="blank" class="ss-social ss-facebook right">Facebook</a></li>
+          <li><a href="#" target="blank" class="ss-social ss-twitter right">Twitter</a></li>
+          <li><a href="https://www.linkedin.com/shareArticle?mini=true&url=<?php bloginfo( 'siteurl' ) ?>/<?php the_permalink(); ?>&title=<?php the_title(); ?>&summary=&source=" target="blank" class="ss-social ss-linkedin right">Linkedin</a></li>
+        </ul>
+      </div>
     </div>
+    </div>
+
+    
+
+
     <!-- /Project Details -->
     </div>
   </div>

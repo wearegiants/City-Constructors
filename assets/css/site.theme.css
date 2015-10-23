@@ -1087,6 +1087,12 @@ html {
     left: auto;
   }
 }
+@media screen and (min-width: 300px) {
+  .page-share--container.text-left {
+    left: -7px;
+    right: auto;
+  }
+}
 .page-share--container.fs-swap-active {
   display: block;
 }
@@ -1107,6 +1113,7 @@ html {
 }
 .page-share--container ul li a:after {
   margin-left: 8px;
+  color: #033E53;
 }
 .page-share--container ul li:last-child a {
   border-bottom: 0;
@@ -1914,7 +1921,6 @@ body.single-project.page-id-21 #footer .interior {
 .cp-item {
   padding-bottom: 25px;
   margin-bottom: 25px;
-  border-bottom: 1px solid #E7E7EC;
 }
 .cp-icon {
   display: inline-block;
@@ -1923,17 +1929,7 @@ body.single-project.page-id-21 #footer .interior {
   margin-right: 15px;
 }
 .cp-header {
-  position: relative;
-  height: 60px;
-  margin-bottom: 12.5px;
-}
-.cp-title {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -webkit-transform: translate(75px, -50%);
-      -ms-transform: translate(75px, -50%);
-          transform: translate(75px, -50%);
+  margin-bottom: 25px;
 }
 .gform_footer {
   font-size: 16px;
