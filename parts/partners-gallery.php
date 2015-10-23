@@ -19,7 +19,7 @@ echo '<div class="slide">';
   if ( wp_is_mobile() ) {
     if($i % 2 == 0) {echo '</div><div class="slide">';} 
   } else {
-    if($i % 6 == 0) {echo '</div><div class="slide">';} 
+    if($i % 4 == 0) {echo '</div><div class="slide">';} 
   }
 ?>
 

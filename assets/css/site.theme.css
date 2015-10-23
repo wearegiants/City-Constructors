@@ -1058,6 +1058,7 @@ html {
 }
 .page-share {
   position: relative;
+  z-index: 99;
 }
 @media screen and (min-width: 300px) {
   .page-share {
@@ -1066,7 +1067,7 @@ html {
 }
 @media screen and (min-width: 740px) {
   .page-share {
-    text-align: right;
+    text-align: right!important;
   }
 }
 .page-share--container {
@@ -1126,6 +1127,30 @@ html {
 .page-share--title:hover {
   color: #999999;
   cursor: pointer;
+}
+.wwd {
+  position: relative;
+}
+.wwd-item {
+  position: relative;
+}
+.wwd-item .bg {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: right;
+  pointer-events: none;
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+  opacity: .1;
+  overflow: hidden;
+  display: none;
+}
+.wwd-item .bg img {
+  display: inline-block;
+  width: 600px;
 }
 .project-wrapper {
   overflow: hidden;
@@ -1430,10 +1455,13 @@ html {
 .project {
   position: relative;
 }
+.project.post-232 ul {
+  display: none;
+}
 @media screen and (min-width: 740px) {
   .project:hover .project-meta {
     opacity: 1;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(3, 62, 83, 0.8);
   }
 }
 .project-title {
@@ -1542,6 +1570,9 @@ html {
 .project-image.tennant-improvements {
   height: 275px;
 }
+.project-image.tennant-improvements ul {
+  display: none;
+}
 .project-featured {
   position: relative;
 }
@@ -1638,6 +1669,9 @@ html {
 }
 .project-tennant-improvements {
   margin-bottom: 20px;
+}
+.project-tennant-improvements ul {
+  display: none;
 }
 .project-tennant-improvements .project-image {
   margin-bottom: 0;

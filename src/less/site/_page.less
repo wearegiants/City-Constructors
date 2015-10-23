@@ -38,12 +38,13 @@
 
 	&-share {
 		position: relative;
+		z-index: 99;
 
 		@media @min {
 			text-align: left;
 		}
 		@media @tablet {
-			text-align: right;
+			text-align: right!important;
 		}
 
 		&--container {
@@ -109,4 +110,24 @@
 		}
 	}
 
+}
+
+.wwd {
+	position: relative;
+	&-item {
+		position: relative;
+		.bg {
+			.cover();
+			text-align: right;
+			pointer-events: none;
+			filter:  grayscale(100%);
+			opacity: .1;
+			overflow: hidden;
+			display: none;
+			img {
+				display: inline-block;
+				width: 600px;
+			}
+		}
+	}
 }

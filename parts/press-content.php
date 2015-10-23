@@ -21,10 +21,6 @@
 <?php include locate_template('parts/press-item.php' );?>
 <?php endwhile; ?>
 
-<?php while ($wp_query->have_posts()) : $wp_query->the_post(); ?>
-<?php include locate_template('parts/press-item.php' );?>
-<?php endwhile; ?>
-
 </div>
 </div>
 
