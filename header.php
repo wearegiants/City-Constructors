@@ -28,7 +28,7 @@
 
 <?php if(is_front_page()): include_once locate_template('parts/home-carousel.php' ); endif; ?>
 
-<header id="header" class="<?php if(is_front_page()): ?>fs-grid  home<?php else: echo ' fs-grid '; endif; ?>">
+<header id="header" class="<?php if(is_front_page()): ?>fs-grid  home<?php else: echo ' fs-grid '; endif; ?>"><div>
   <div class="fs-row">
     <menu id="header-mobile" class="fs-cell fs-lg-hide fs-md-2 fs-sm-1 text-right">
       <a data-swap-target=".mobile-menu" class="mobile-toggle btn btn-hamburg btn-nav btn-first"><span class="icon"></span></a>
@@ -49,6 +49,6 @@
     </menu>
     <?php endif; ?>
   </div>
-</header>
+</div></header>
 
 <div id="content-wrapper" class='fs-grid fs-grid-fluid'>

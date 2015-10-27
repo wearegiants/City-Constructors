@@ -1,3 +1,20 @@
+function headerSticky(){
+  var options = {
+      offset: '.page-content',
+      classes: {
+          clone:   'banner--clone',
+          stick:   'banner--stick',
+          unstick: 'banner--unstick'
+      },
+      onInit:  function () {
+        $('.banner--clone').prepend('<div>').append('</div>');
+      },
+  };
+
+  // Initialise with options
+  var banner = new Headhesive('#header', options);
+}
+
 function ajaxSideload(){
   $('.sideload').magnificPopup({
     type: 'ajax',
@@ -126,4 +143,5 @@ $(document).ready(function(){
   smoothscroll();
   mobileMenu();
   ajaxSideload();
+  headerSticky();
 });

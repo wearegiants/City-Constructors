@@ -2,9 +2,11 @@ body,html {
    background: @bgGray;
 }
 
+@maxWidth: 1280px;
+
 #wrapper {
 
-   max-width: 1280px;
+   max-width: @maxWidth;
    margin: auto;
    position: relative;
    background: @white;
@@ -21,6 +23,13 @@ body,html {
       box-shadow: 0 0 @spaced fade(@black, 10%)
    }
 
+}
+
+#header.banner--clone > div {
+   max-width: @maxWidth;
+   margin: auto;
+   position: relative;
+   background: @white;
 }
 
 #content-wrapper {

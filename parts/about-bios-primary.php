@@ -29,7 +29,12 @@
   <div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-contained">
   <?php the_excerpt(); ?>
   </div>
-  <a class="btn btn-link btn-icon btn-first ss-gizmo ss-plus sideload" href="<?php the_permalink(); ?>">More about Bryson</a>
+  <?php 
+    $myvalue = get_the_title();
+    $arr = explode(' ',trim($myvalue));
+  ?>
+    
+  <a class="btn btn-link btn-icon btn-first ss-gizmo ss-plus sideload" href="<?php the_permalink(); ?>">More about <?php echo $arr[0]; ?></a>
 </div>
 
 <?php endwhile; ?>

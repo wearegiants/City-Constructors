@@ -850,6 +850,12 @@ html {
     box-shadow: 0 0 25px rgba(51, 51, 51, 0.1);
   }
 }
+#header.banner--clone > div {
+  max-width: 1280px;
+  margin: auto;
+  position: relative;
+  background: #fff;
+}
 #content-wrapper {
   position: relative;
   z-index: 5;
@@ -962,6 +968,50 @@ html {
 }
 #header .menu li:last-child a {
   padding-right: 0;
+}
+#header.banner--clone,
+#header.banner--clone.home {
+  color: #333;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: none;
+  -webkit-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  transform: translateY(-100%);
+  -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+}
+#header.banner--clone > div,
+#header.banner--clone.home > div {
+  background: rgba(255, 255, 255, 0.97);
+}
+#header.banner--clone a,
+#header.banner--clone.home a {
+  color: #555555;
+}
+#header.banner--clone .menu,
+#header.banner--clone.home .menu {
+  padding-top: 0;
+}
+#header.banner--clone .menu .menu-item,
+#header.banner--clone.home .menu .menu-item {
+  height: 60px;
+  line-height: 60px;
+}
+#header.banner--clone #header--logo,
+#header.banner--clone.home #header--logo,
+#header.banner--clone .btn-nav,
+#header.banner--clone.home .btn-nav {
+  height: 60px;
+  line-height: 60px;
+}
+#header.banner--stick,
+#header.banner--stick.home {
+  -webkit-transform: translateY(0%);
+  -ms-transform: translateY(0%);
+  transform: translateY(0%);
 }
 #header.home .menu {
   padding-top: 0;
