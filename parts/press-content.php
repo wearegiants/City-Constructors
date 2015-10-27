@@ -1,7 +1,7 @@
 
 <?php
   $args = array(
-    'showposts'        => 6,
+    'showposts'        => 30,
     'post_type'        => 'press',
     'order'            => 'ASC',
     'orderby'          => 'menu_order'  
