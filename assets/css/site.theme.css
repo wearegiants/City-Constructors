@@ -404,6 +404,22 @@ form input[type=submit].menu-item:first-child,
 form input[type=search].menu-item:first-child {
   padding-left: 0;
 }
+@media screen and (min-width: 740px) {
+  form input[type=submit]-nav,
+  form input[type=search]-nav,
+  form input[type=submit].menu-item,
+  form input[type=search].menu-item {
+    padding: 0 6px;
+  }
+}
+@media screen and (min-width: 1220px) {
+  form input[type=submit]-nav,
+  form input[type=search]-nav,
+  form input[type=submit].menu-item,
+  form input[type=search].menu-item {
+    padding: 0 10px;
+  }
+}
 form input[type=submit].btn-lg,
 form input[type=search].btn-lg {
   font-size: 20px;
@@ -613,6 +629,22 @@ form input[type=search].btn-success.btn-default {
 .btn.menu-item:first-child,
 #header .menu li.menu-item:first-child {
   padding-left: 0;
+}
+@media screen and (min-width: 740px) {
+  .btn-nav,
+  #header .menu li-nav,
+  .btn.menu-item,
+  #header .menu li.menu-item {
+    padding: 0 6px;
+  }
+}
+@media screen and (min-width: 1220px) {
+  .btn-nav,
+  #header .menu li-nav,
+  .btn.menu-item,
+  #header .menu li.menu-item {
+    padding: 0 10px;
+  }
 }
 .btn.btn-lg,
 #header .menu li.btn-lg {
@@ -907,6 +939,9 @@ html {
 }
 #header-mobile {
   text-align: right;
+}
+#header-mobile a {
+  float: right;
 }
 #header--logo {
   margin: 0;
@@ -1438,7 +1473,12 @@ html {
 }
 @media screen and (min-width: 980px) {
   .carousel-slide {
-    height: 650px;
+    height: 600px;
+  }
+}
+@media screen and (max-height: 600px) {
+  .carousel-slide {
+    height: 470px;
   }
 }
 .carousel-slide:before {

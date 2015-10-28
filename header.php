@@ -30,7 +30,7 @@
 
 <header id="header" class="<?php if(is_front_page()): ?>fs-grid  home<?php else: echo ' fs-grid '; endif; ?>"><div>
   <div class="fs-row">
-    <menu id="header-mobile" class="fs-cell fs-lg-hide fs-md-2 fs-sm-1 text-right">
+    <menu id="header-mobile" class="fs-cell fs-lg-hide fs-md-2 fs-sm-1">
       <a data-swap-target=".mobile-menu" class="mobile-toggle btn btn-hamburg btn-nav btn-first"><span class="icon"></span></a>
     </menu>
     <menu id="header-navigation" class="fs-cell fs-lg-10 fs-md-hide fs-sm-hide">
