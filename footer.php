@@ -26,7 +26,7 @@
               <?php dynamic_sidebar( 'footer-widget-area' ); ?>
               <menu id="footer-social" class="fs-cell fs-all-full">
                 <a href="https://www.facebook.com/cciteam" class="btn btn-nav ss-social ss-facebook"></a>
-                <a href="https://www.linkedin.com/company/city-constructors-inc" class="btn btn-nav ss-social ss-linkedin"></a>
+                <a href="https://www.linkedin.com/company/2086741" class="btn btn-nav ss-social ss-linkedin"></a>
                 <a href="https://instagram.com/cciteam" class="btn btn-nav ss-social ss-instagram"></a>
               </menu>
             </div>

@@ -33,7 +33,7 @@
   <div class="fs-cell fs-lg-10 fs-md-5 fs-sm-3 fs-centered">
     
       <hr class="invisible">
-      <h3 class="section-title"><span>All Projects</span></h3>
+      <h3 class="section-title"><span>Selected Projects</span></h3>
       <br>
       <!--
       <a href="#" class="selected">All Projects</a>

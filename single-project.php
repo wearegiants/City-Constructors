@@ -56,7 +56,7 @@
       <div class="page-share--container text-left">
         <ul>
           <li><a href="https://www.facebook.com/sharer/sharer.php?u=<?php bloginfo( 'siteurl' ) ?>/<?php the_permalink(); ?>" target="blank" class="ss-social ss-facebook right">Facebook</a></li>
-          <li><a href="#" target="blank" class="ss-social ss-twitter right">Twitter</a></li>
+          <li><a href="https://twitter.com/home?status=<?php wp_title( ' | ', true, 'right' ); ?><?php bloginfo( 'sitename' ); ?> | <?php bloginfo( 'siteurl' ) ?>/<?php the_permalink(); ?>" target="blank" class="ss-social ss-twitter right">Twitter</a></li>
           <li><a href="https://www.linkedin.com/shareArticle?mini=true&url=<?php bloginfo( 'siteurl' ) ?>/<?php the_permalink(); ?>&title=<?php the_title(); ?>&summary=&source=" target="blank" class="ss-social ss-linkedin right">Linkedin</a></li>
         </ul>
       </div>

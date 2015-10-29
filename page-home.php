@@ -5,7 +5,7 @@
 <div id="home-mission" class="page-content">
   <div class='fs-row'>
     <div class="fs-cell fs-xl-11 fs-lg-12 fs-md-6 fs-sm-3 fs-centered">
-      <div class="carousel carousel_auto_height" data-carousel-options='{"controls":false,"autoAdvance":true, "autoTime": 3000}'>
+      <div class="carousel carousel_auto_height" data-carousel-options='{"controls":false,"autoAdvance":true, "autoTime": 5000}'>
         <?php the_field('mission_statement'); ?>
       </div>
     </div>

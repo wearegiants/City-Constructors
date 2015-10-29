@@ -39,7 +39,7 @@
     <?php if(is_front_page()): ?>
     <menu id="header-social" class="fs-cell fs-lg-2 fs-md-hide fs-sm-hide text-right">
       <a target="_blank" href="https://www.facebook.com/cciteam" class="btn btn-nav ss-social ss-facebook"></a>
-      <a target="_blank" href="https://www.linkedin.com/company/city-constructors-inc" class="btn btn-nav ss-social ss-linkedin"></a>
+      <a target="_blank" href="https://www.linkedin.com/company/2086741" class="btn btn-nav ss-social ss-linkedin"></a>
       <a target="_blank" href="https://instagram.com/cciteam" class="btn btn-nav ss-social ss-instagram"></a>
     </menu>
     <?php endif; ?>
