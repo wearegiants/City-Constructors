@@ -1,5 +1,5 @@
 <div class="press-item">
-<?php if ( has_post_thumbnail() ) { the_post_thumbnail('gallery-md', array('class' => 'img-responsive')); } ?>
+<?php if ( has_post_thumbnail() ) { the_post_thumbnail('gallery-lg', array('class' => 'img-responsive')); } ?>
 <h4 class="press-title"><?php the_title(); ?></h4>
 <?php 
 
