@@ -23,6 +23,15 @@
       <div class="section section-forehead awards">
         <div class="fs-row">
           <div class="fs-cell fs-lg-10 fs-md-6 fs-sm-3 fs-centered">
+            <h4 class="title"><span>Selected Press</span></h4>
+            <?php include locate_template('parts/press-list.php' );?>
+          </div>
+        </div>
+      </div>
+
+      <div class="section section-forehead awards">
+        <div class="fs-row">
+          <div class="fs-cell fs-lg-10 fs-md-6 fs-sm-3 fs-centered">
             <h4 class="title"><span>Awards & Recognition</span></h4>
           </div>
         </div>

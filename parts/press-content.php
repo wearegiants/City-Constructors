@@ -1,7 +1,7 @@
 
 <?php
   $args = array(
-    'showposts'        => 30,
+    'showposts'        => 3,
     'post_type'        => 'press',
     'order'            => 'ASC',
     'orderby'          => 'menu_order'  
@@ -15,6 +15,8 @@
 ?>
 
 <div class="fs-cell fs-lg-10 fs-md-6 fs-sm-3 fs-centered">
+<h4 class="section-title"><span>Latest Press</span></h4>
+<br>
 <div id="press" class="carousel" data-carousel-options='{"show":3}'>
 
 <?php while ($wp_query->have_posts()) : $wp_query->the_post(); ?>
