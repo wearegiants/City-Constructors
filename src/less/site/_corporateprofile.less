@@ -3,7 +3,6 @@
   &-item {
     padding-bottom: @spaced;
     margin-bottom: @spaced*1;
-    //border-bottom: 1px solid @lighterGray;
   }
 
   &-icon {
@@ -11,19 +10,32 @@
     width: 60px;
     float: left;
     margin-right: 15px;
+    margin-top: -5px;
   }
 
   &-header {
-    //position: relative;
-    //height: 60px;
+    position: relative;
+    height: 50px;
     margin-bottom: @spaced;
   }
 
   &-title {
-    // margin: 0;
-    // position: absolute;
-    // top: 50%;
-    // transform: translate( 0, -50%);
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 75px;
+    line-height: 1.2;
+    transform: translate( 0, -50%);
+    span {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &-full {
+    .cp-desc {
+      columns: 2;
+    }
   }
 
 }

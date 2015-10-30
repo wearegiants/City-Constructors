@@ -7,12 +7,14 @@
   if ( get_sub_field('Width') == "full" ){ $width = 'full'; } 
 ?>
 
-<div class="packed cp-item fs-cell fs-lg-<?php echo $width; ?> fs-md-6 fs-sm-3">
-  <header class="cp-header">
-    <!--<div class="cp-icon"><img src="/assets/img/circle.svg" class="img-responsive"></div>-->
-    <h3 class="section-title"><span><?php the_sub_field('title'); ?></span></h3>
+<div class="packed cp-item cp-<?php echo $width; ?> fs-cell fs-lg-<?php echo $width; ?> fs-md-6 fs-sm-3">
+  <header class="cp-header clearfix">
+    <div class="cp-icon"><img src="<?php the_sub_field('thumbnail'); ?>" class="img-responsive"></div>
+    <h3 class="section-title cp-title"><span><?php the_sub_field('title'); ?></span></h3>
   </header>
-  <?php the_sub_field('description'); ?>
+  <div class="cp-desc">
+    <?php the_sub_field('description'); ?>
+  </div>
 </div>
 
 <?php endwhile; endif; ?>
