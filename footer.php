@@ -37,6 +37,7 @@
   </div>
 </footer>
 
+</div><!--WrapperInner-->
 </div><!--Wrapper-->
 
 <?php include locate_template('parts/mobile-menu.php' ); ?>

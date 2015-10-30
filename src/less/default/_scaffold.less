@@ -2,15 +2,19 @@ body,html {
    background: @bgGray;
 }
 
-@maxWidth: 1280px;
+@maxWidth: 1680px;
 
 #wrapper {
 
    max-width: @maxWidth;
    margin: auto;
    position: relative;
-   background: @white;
+   
    padding-bottom: @spaced;
+
+   &-inner {
+      background: @white;   
+   }
 
    @media @min {
       //padding: @spaced/3;
@@ -19,8 +23,14 @@ body,html {
       //padding: @spaced;
    }
    @media @max {
-      margin: @spaced auto;
-      box-shadow: 0 0 @spaced fade(@black, 10%)
+      padding-right: @spaced;
+      padding-left:  @spaced;
+   }
+   &-inner {
+      @media @max {
+         margin: @spaced auto;
+         box-shadow: 0 0 @spaced fade(@black, 10%)
+      }
    }
 
 }
