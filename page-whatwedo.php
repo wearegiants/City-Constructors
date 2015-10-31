@@ -16,7 +16,10 @@
                   while ( have_rows('what_we_do') ) : the_row();
                 ?>
                 <div class="wwd-item fs-row absolute-parent">
-                  <div class="fs-cell fs-lg-11 fs-lg-push-1 fs-md-6 fs-sm-3"><?php the_sub_field('description'); ?></div>
+                  <div class="fs-cell fs-lg-11 fs-lg-push-1 fs-md-6 fs-sm-3">
+                  <div class="cp-icon"><img src="<?php the_sub_field('image'); ?>" class="img-responsive"></div>
+                  <?php the_sub_field('description'); ?>
+                  </div>
                   <hr class="fs-cell fs-all-full divider"/>
                   <br>
                   <div class="bg"><img src="<?php the_sub_field('image'); ?>" class="img-responsive" /></div>
