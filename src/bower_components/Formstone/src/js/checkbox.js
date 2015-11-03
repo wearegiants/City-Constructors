@@ -69,9 +69,7 @@
 			.on(Events.click, data, onClick)
 			.on(Events.deselect, data, onDeselect);
 
-		data.$checkbox.touch({
-			tap: true
-		}).on(Events.tap, data, onClick);
+		data.$checkbox.on(Events.click, data, onClick);
 	}
 
 	/**
@@ -82,8 +80,8 @@
 	 */
 
 	function destruct(data) {
-		data.$checkbox.off(Events.namespace)
-					  .touch("destroy");
+		data.$checkbox.off(Events.namespace);
+					  // .fsTouch("destroy");
 
 		data.$marker.remove();
 		data.$states.remove();
@@ -236,8 +234,11 @@
 	 * @name Checkbox
 	 * @description A jQuery plugin for replacing checkboxes.
 	 * @type widget
+	 * @main checkbox.js
+	 * @main checkbox.css
+	 * @dependency jQuery
 	 * @dependency core.js
-	 * @dependency touch.js
+	 * @__dependency touch.js
 	 */
 
 	var Plugin = Formstone.Plugin("checkbox", {
@@ -287,8 +288,7 @@
 			},
 
 			events: {
-				deselect : "deselect",
-				tap      : "tap"
+				deselect : "deselect"
 			}
 		}),
 

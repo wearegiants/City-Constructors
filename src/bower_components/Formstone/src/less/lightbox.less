@@ -4,7 +4,7 @@
 	// Overlay
 
 	@fs-lightbox-overlay-background:				#000;
-	@fs-lightbox-overlay-opacity:					0.85;
+	@fs-lightbox-overlay-opacity:					0.75;
 
 	// Transition
 
@@ -13,20 +13,20 @@
 
 	// Lightbox
 
-	@fs-lightbox-background:						#000;
-	@fs-lightbox-padding:							0;
+	@fs-lightbox-background:						#fff;
+	@fs-lightbox-padding:							10px;
 	@fs-lightbox-z-index:							100;
 
-	@fs-lightbox-border-radius:						0px;
-	@fs-lightbox-box-shadow: 						0 0 25px rgba(0,0,0,.1);
+	@fs-lightbox-border-radius:						3px;
+	@fs-lightbox-box-shadow: 						0 0 25px #000;
 
 	// Close Button
 
-	@fs-lightbox-close-background:					transparent;
+	@fs-lightbox-close-background:					#fff;
 	@fs-lightbox-close-font-family:					"Helvetica", Arial, sans-serif;
-	@fs-lightbox-close-font-size:					30px;
+	@fs-lightbox-close-font-size:					22px;
 	@fs-lightbox-close-font-weight:					700;
-	@fs-lightbox-close-color:						#fff;
+	@fs-lightbox-close-color:						#333;
 	@fs-lightbox-close-border-radius:				100%;
 	@fs-lightbox-close-width: 						30px;
 	@fs-lightbox-close-height:						30px;
@@ -37,17 +37,17 @@
 
 	// Content
 
-	@fs-lightbox-content-background:				#000;
+	@fs-lightbox-content-background:				#fff;
 
 	// Controls
 
-	@fs-lightbox-control-background:				transparent;
+	@fs-lightbox-control-background:				#fff;
 	@fs-lightbox-control-opacity:					1;
 	@fs-lightbox-control-height:					40px;
 	@fs-lightbox-control-width:						40px;
 
 	@fs-lightbox-control-transition-duration:		0.15s;
-	@fs-lightbox-control-box-shadow: 				0;
+	@fs-lightbox-control-box-shadow: 				0 0 5px fade(#000, 25);
 
 	@fs-lightbox-control-border-radius:				100%;
 
@@ -56,7 +56,7 @@
 
 	// Control Carets
 
-	@fs-lightbox-control-caret-color:				#fff;
+	@fs-lightbox-control-caret-color:				#333;
 	@fs-lightbox-control-caret-size:				8px;
 
 	@fs-lightbox-control-caret-width:				(@fs-lightbox-control-caret-size * 1.3);
@@ -222,6 +222,18 @@
 	 * @type modifier
 	 * @description Indicates iFrame content
 	 */
+	/**
+	 * @class
+	 * @name .fs-lightbox.fs-lightbox-has_caption
+	 * @type modifier
+	 * @description Indicates caption is present
+	 */
+	/**
+	 * @class
+	 * @name .fs-lightbox.fs-lightbox-has_controls
+	 * @type modifier
+	 * @description Indicates controls are present
+	 */
 
 	.fs-lightbox {
 		width: 200px;
@@ -242,7 +254,7 @@
 		-webkit-transform: translateZ(0);
 
 		&,
-		* {
+		*:not(input):not(textarea) {
 			box-sizing: border-box;
 			// transition: none;
 			user-select: none !important;
@@ -268,14 +280,28 @@
 
 		&-animating {
 			transition:
-				height @fs-lightbox-transition-duration @fs-lightbox-transition-timing,
-				width @fs-lightbox-transition-duration @fs-lightbox-transition-timing,
+				height  @fs-lightbox-transition-duration @fs-lightbox-transition-timing,
+				width   @fs-lightbox-transition-duration @fs-lightbox-transition-timing,
 				opacity @fs-lightbox-transition-duration linear,
-				top @fs-lightbox-transition-duration @fs-lightbox-transition-timing;
+				top     @fs-lightbox-transition-duration @fs-lightbox-transition-timing;
 		}
 
 		&-animating &-container {
-			transition: opacity @fs-lightbox-transition-duration linear @fs-lightbox-transition-duration;
+			transition:
+				opacity    @fs-lightbox-transition-duration linear @fs-lightbox-transition-duration,
+				visibility @fs-lightbox-transition-duration linear @fs-lightbox-transition-duration;
+		}
+
+		&-mobile &-image_container {
+			transform: translate3D(0, 0, 0);
+		}
+
+		&-mobile&-animating &-image_container {
+			transition:
+				height @fs-lightbox-transition-duration @fs-lightbox-transition-timing,
+				width  @fs-lightbox-transition-duration @fs-lightbox-transition-timing,
+				top    @fs-lightbox-transition-duration @fs-lightbox-transition-timing,
+				left   @fs-lightbox-transition-duration @fs-lightbox-transition-timing;
 		}
 
 		/**
@@ -325,10 +351,9 @@
 			height: @fs-lightbox-close-height;
 
 			position: absolute;
-			top: 0;
-			right: 0;
+			top: -@fs-lightbox-close-height / 4;
+			right: -@fs-lightbox-close-width / 4;
 			z-index: (@fs-lightbox-z-index + 5);
-			text-shadow: 0 0 5px rgba(0,0,0,.5);
 
 			background: @fs-lightbox-close-background;
 			border-radius: @fs-lightbox-close-border-radius;
@@ -387,7 +412,10 @@
 			display: block;
 			margin: auto;
 			opacity: 0;
-			transition: opacity @fs-lightbox-transition-duration linear;
+			transition:
+				opacity    @fs-lightbox-transition-duration linear,
+				visibility @fs-lightbox-transition-duration linear;
+			visibility: hidden;
 
 			&:before,
 			&:after {
@@ -462,6 +490,7 @@
 			opacity: 1;
 			overflow: hidden;
 			padding: 0;
+			visibility: visible;
 		}
 
 		// inline content
@@ -480,6 +509,14 @@
 			-webkit-overflow-scrolling: touch;
 		}
 
+		&-mobile &-image_container {
+			width: 1px;
+			height: 1px;
+
+			margin: 0;
+			position: absolute;
+		}
+
 		/**
 		 * @class
 		 * @name .fs-lightbox-image
@@ -489,6 +526,12 @@
 
 		&-image {
 			float: left;
+		}
+
+		&-mobile &-image {
+			position: relative;
+
+			float: none;
 		}
 
 		/**
@@ -578,8 +621,11 @@
 			opacity: @fs-lightbox-control-opacity;
 			overflow: hidden;
 			text-indent: 200%;
-			transition: opacity @fs-lightbox-control-transition-duration linear;
+			transition:
+				opacity    @fs-lightbox-control-transition-duration linear,
+				visibility @fs-lightbox-control-transition-duration linear;
 			white-space: nowrap;
+			visibility: visible;
 
 			&:before {
 				width: 0;
@@ -647,22 +693,26 @@
 
 		&-control_disabled {
 			opacity: 0;
+			visibility: hidden;
 		}
 
 		// controls hovers
 
 		.no-touch & &-control {
 			opacity: 0;
+			visibility: hidden;
 		}
 
 		.no-touch &:hover &-control {
 			opacity: @fs-lightbox-control-opacity;
+			visibility: visible;
 		}
 
 		.no-touch & &-control_disabled,
 		.no-touch &:hover &-control_disabled {
 			opacity: 0;
 			cursor: default;
+			visibility: hidden;
 		}
 
 		/**
@@ -739,10 +789,12 @@
 		&-loading &-container {
 			opacity: 0;
 			transition: opacity @fs-lightbox-transition-duration linear;
+			visibility: hidden;
 		}
 
 		&-loading &-loading_icon {
 			opacity: 1;
+			visibility: visible;
 		}
 
 		// mobile
@@ -836,6 +888,7 @@
 			border-radius: 0;
 			box-shadow: none;
 			opacity: 1;
+			visibility: visible;
 		}
 
 		&-mobile &-control_previous {
@@ -861,6 +914,7 @@
 		.no-touch &-mobile &-control,
 		.no-touch &-mobile:hover &-control {
 			opacity: @fs-lightbox-control-opacity;
+			visibility: visible;
 		}
 
 		&-mobile &-control_disabled,
@@ -868,6 +922,7 @@
 		.no-touch &-mobile:hover &-control_disabled {
 			opacity: 0;
 			cursor: default !important;
+			visibility: hidden;
 		}
 
 		// meta
@@ -913,6 +968,8 @@
 
 		&-mobile&-inline &-content,
 		&-mobile&-iframe &-content {
+			height: 100%;
+
 			overflow-x: hidden;
 			overflow-y: scroll;
 			-webkit-overflow-scrolling: touch;

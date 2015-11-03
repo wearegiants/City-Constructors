@@ -122,6 +122,8 @@
 	 * @name Cookie
 	 * @description A jQuery plugin for simple access to browser cookies.
 	 * @type utility
+	 * @main cookie.js
+	 * @dependency jQuery
 	 * @dependency core.js
 	 */
 

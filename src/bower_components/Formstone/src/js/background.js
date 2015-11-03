@@ -31,11 +31,7 @@
 
 	function construct(data) {
 		// guid
-		data.guid         = "__" + (GUID++);
 		data.youTubeGuid  = 0;
-		data.eventGuid    = Events.namespace + data.guid;
-		data.rawGuid      = RawClasses.base + data.guid;
-		data.classGuid    = "." + data.rawGuid;
 
 		data.$container = $('<div class="' + RawClasses.container + '"></div>').appendTo(this);
 
@@ -102,9 +98,15 @@
 				}
 			}
 
+			var isVideo = !data.isYouTube && ($.type(source) === "object" &&
+												(source.hasOwnProperty("mp4") || source.hasOwnProperty("ogg") || source.hasOwnProperty("webm") )
+											 );
+
+			data.video      = data.isYouTube || isVideo;
+			data.playing    = false;
+
 			if (data.isYouTube) {
 				// youtube video
-				data.playing = false;
 				data.playerReady = false;
 				data.posterLoaded = false;
 
@@ -117,8 +119,8 @@
 
 				// Responsive image handling
 				if ($.type(source) === "object") {
-					var sources    = {},
-						keys       = [],
+					var cache    = [],
+						keys     = [],
 						i;
 
 					for (i in source) {
@@ -131,15 +133,16 @@
 
 					for (i in keys) {
 						if (keys.hasOwnProperty(i)) {
-							sources[ keys[i] ] = {
+							cache.push({
 								width    : parseInt( keys[i] ),
-								url      : source[ keys[i] ]
-							};
+								url      : source[ keys[i] ],
+								mq       : window.matchMedia( "(min-width: " + parseInt( keys[i] ) + "px)" )
+							});
 						}
 					}
 
 					data.responsive = true;
-					data.sources = sources;
+					data.sources = cache;
 
 					newSource = calculateSource(data);
 				}
@@ -160,15 +163,28 @@
 	 */
 
 	function calculateSource(data) {
+		var source = data.source;
+
 		if (data.responsive) {
+			source = data.sources[0].url;
+
 			for (var i in data.sources) {
-				if (data.sources.hasOwnProperty(i) && Formstone.windowWidth >= data.sources[i].width) {
-					return data.sources[i].url;
+				if (data.sources.hasOwnProperty(i)) {
+					if (Formstone.support.nativeMatchMedia) {
+						if (data.sources[i].mq.matches) {
+							source = data.sources[i].url;
+						}
+					} else {
+						// ie8 fallback, grab the first breakpoint that's large enough
+						if (data.sources[i].width < Formstone.fallbackWidth) {
+							source = data.sources[i].url;
+						}
+					}
 				}
 			}
 		}
 
-		return data.source;
+		return source;
 	}
 
 	/**
@@ -195,7 +211,7 @@
 			}
 
 			// YTransition in
-			$media.transition({
+			$media.fsTransition({
 				property: "opacity"
 			},
 			function() {
@@ -269,7 +285,7 @@
 				$video = $media.find("video");
 
 			$video.one(Events.loadedMetaData, function(e) {
-				$media.transition({
+				$media.fsTransition({
 					property: "opacity"
 				},
 				function() {
@@ -282,7 +298,7 @@
 
 				// Events
 				if (data.autoPlay) {
-					this.play();
+					playVideo(data);
 				}
 			});
 
@@ -383,7 +399,7 @@
 									data.player.pauseVideo();
 								}
 
-								$media.transition({
+								$media.fsTransition({
 									property: "opacity"
 								},
 								function() {
@@ -459,7 +475,7 @@
 		var $media = data.$container.find(Classes.media);
 
 		if ($media.length >= 1) {
-			$media.transition({
+			$media.fsTransition({
 				property: "opacity"
 			},
 			function() {
@@ -470,23 +486,41 @@
 	}
 
 	/**
+	 * @method private
+	 * @name pauseVideo
+	 * @description Pauses target video
+	 * @param data [object] "Instance data"
+	 */
+
+	/**
 	 * @method
 	 * @name pause
 	 * @description Pauses target video
 	 * @example $(".target").background("pause");
 	 */
 
-	function pause(data) {
-		if (data.isYouTube && data.playerReady) {
-			data.player.pauseVideo();
-		} else {
-			var $video = data.$container.find("video");
+	function pauseVideo(data) {
+		if (data.video) {
+			if (data.isYouTube && data.playerReady) {
+				data.player.pauseVideo();
+			} else {
+				var $video = data.$container.find("video");
 
-			if ($video.length) {
-				$video[0].pause();
+				if ($video.length) {
+					$video[0].pause();
+				}
 			}
+
+			data.playing = false;
 		}
 	}
+
+	/**
+	 * @method private
+	 * @name playVideo
+	 * @description Plays target video
+	 * @param data [object] "Instance data"
+	 */
 
 	/**
 	 * @method
@@ -495,15 +529,79 @@
 	 * @example $(".target").background("play");
 	 */
 
-	function play(data) {
-		if (data.isYouTube && data.playerReady) {
-			data.player.playVideo();
-		} else {
-			var $video = data.$container.find("video");
+	function playVideo(data) {
+		if (data.video) {
+			if (data.isYouTube && data.playerReady) {
+				data.player.playVideo();
+			} else {
+				var $video = data.$container.find("video");
 
-			if ($video.length) {
-				$video[0].play();
+				if ($video.length) {
+					$video[0].play();
+				}
 			}
+
+			data.playing = true;
+		}
+	}
+
+	/**
+	 * @method private
+	 * @name muteVideo
+	 * @description Mutes target video
+	 * @param data [object] "Instance data"
+	 */
+
+	/**
+	 * @method
+	 * @name mute
+	 * @description Mutes target video
+	 * @example $(".target").background("mute");
+	 */
+
+	function muteVideo(data) {
+		if (data.video) {
+			if (data.isYouTube && data.playerReady) {
+				data.player.mute();
+			} else {
+				var $video = data.$container.find("video");
+
+				if ($video.length) {
+					$video[0].muted = true;
+				}
+			}
+
+			data.playing = true;
+		}
+	}
+
+	/**
+	 * @method private
+	 * @name unmuteVideo
+	 * @description Unmutes target video
+	 * @param data [object] "Instance data"
+	 */
+
+	/**
+	 * @method
+	 * @name unmute
+	 * @description Unmutes target video
+	 * @example $(".target").background("unmute");
+	 */
+
+	function unmuteVideo(data) {
+		if (data.video) {
+			if (data.isYouTube && data.playerReady) {
+				data.player.unMute();
+			} else {
+				var $video = data.$container.find("video");
+
+				if ($video.length) {
+					$video[0].muted = false;
+				}
+			}
+
+			data.playing = true;
 		}
 	}
 
@@ -634,6 +732,9 @@
 	 * @name Background
 	 * @description A jQuery plugin for full-frame image and video backgrounds.
 	 * @type widget
+	 * @main background.js
+	 * @main background.css
+	 * @dependency jQuery
 	 * @dependency core.js
 	 * @dependency transition.js
 	 */
@@ -688,8 +789,10 @@
 				_destruct     : destruct,
 				_resize       : resize,
 
-				play          : play,
-				pause         : pause,
+				play          : playVideo,
+				pause         : pauseVideo,
+				mute          : muteVideo,
+				unmute        : unmuteVideo,
 				resize        : doResizeInstance,
 				load          : loadMedia,
 				unload        : unloadMedia
@@ -705,7 +808,6 @@
 
 		Window          = Formstone.window,
 		$Instances      = [],
-		GUID            = 0,
 
 		BGSupport       = ("backgroundSize" in Formstone.document.documentElement.style),
 		YouTubeReady    = false,

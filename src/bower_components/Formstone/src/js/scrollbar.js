@@ -63,8 +63,16 @@
 
 		data.$content.on(Events.scroll, data, onScroll);
 
-		this.on(Events.touchMouseDown, Classes.track, data, onTrackDown)
-			.on(Events.touchMouseDown, Classes.handle, data, onHandleDown);
+		if (data.mouseWheel) {
+			data.$content.on("DOMMouseScroll" + Events.namespace + " mousewheel" + Events.namespace, data, onMouseWheel);
+		}
+
+		data.$track.fsTouch({
+			axis    : (data.horizontal) ? "x" : "y",
+			pan     : true
+		}).on(Events.panStart, data, onPanStart)
+		  .on(Events.pan, data, onPan)
+		  .on(Events.panEnd, data, onPanEnd);
 
 		resizeInstance(data);
 
@@ -79,6 +87,8 @@
 	 */
 
 	function destruct(data) {
+		data.$track.fsTouch("destroy");
+
 		data.$bar.remove();
 		data.$content.off(Events.namespace)
 					 .contents()
@@ -92,7 +102,7 @@
 	 * @method
 	 * @name scroll
 	 * @description Scrolls instance of plugin to element or position
-	 * @param position [string || int] <null> "Target element selector or static position"
+	 * @param position [string or int] <null> "Target element selector or static position"
 	 * @param duration [int] <null> "Optional scroll duration"
 	 * @example $(".target").scrollbar("scroll", position, duration);
 	 */
@@ -113,7 +123,13 @@
 					position = offset.top + data.$content.scrollTop();
 				}
 			} else {
-				position = data.$content.scrollTop();
+				if (position === "top") {
+					position = 0;
+				} else if (position === "bottom") {
+					position = data.horizontal ? data.$content[0].scrollWidth : data.$content[0].scrollHeight;
+				} else {
+					position = data.$content.scrollTop();
+				}
 			}
 		}
 
@@ -125,9 +141,15 @@
 
 	/**
 	 * @method
-	 * @name resizeInstance
+	 * @name resize
 	 * @description Resizes layout on instance of plugin
 	 * @example $(".target").scrollbar("resize");
+	 */
+
+	/**
+	 * @method private
+	 * @name resizeInstance
+	 * @description Resizes layout on instance of plugin
 	 */
 
 	function resizeInstance(data)  {
@@ -223,7 +245,13 @@
 		data.$track.css(trackStyles);
 		data.$handle.css(handleStyles);
 
+		data.panning = false;
+
 		positionContent(data, handlePosition);
+
+		onScroll({
+			data    : data
+		});
 
 		data.$el.removeClass(RawClasses.setup);
 	}
@@ -241,171 +269,156 @@
 		var data = e.data,
 			handleStyles = {};
 
-		if (data.horizontal) {
-			// Horizontal
-			var scrollLeft = data.$content.scrollLeft();
+		if (!data.panning) {
+			if (data.horizontal) {
+				// Horizontal
+				var scrollLeft = data.$content.scrollLeft();
 
-			if (scrollLeft < 0) {
-				scrollLeft = 0;
+				if (scrollLeft < 0) {
+					scrollLeft = 0;
+				}
+
+				data.handleLeft = scrollLeft / data.scrollRatio;
+
+				if (data.handleLeft > data.handleBounds.right) {
+					data.handleLeft = data.handleBounds.right;
+				}
+
+				handleStyles = {
+					left: data.handleLeft
+				};
+			} else {
+				// Vertical
+				var scrollTop = data.$content.scrollTop();
+
+				if (scrollTop < 0) {
+					scrollTop = 0;
+				}
+
+				data.handleTop = scrollTop / data.scrollRatio;
+
+				if (data.handleTop > data.handleBounds.bottom) {
+					data.handleTop = data.handleBounds.bottom;
+				}
+
+				handleStyles = {
+					top: data.handleTop
+				};
 			}
 
-			data.handleLeft = scrollLeft / data.scrollRatio;
-
-			if (data.handleLeft > data.handleBounds.right) {
-				data.handleLeft = data.handleBounds.right;
-			}
-
-			handleStyles = {
-				left: data.handleLeft
-			};
-		} else {
-			// Vertical
-			var scrollTop = data.$content.scrollTop();
-
-			if (scrollTop < 0) {
-				scrollTop = 0;
-			}
-
-			data.handleTop = scrollTop / data.scrollRatio;
-
-			if (data.handleTop > data.handleBounds.bottom) {
-				data.handleTop = data.handleBounds.bottom;
-			}
-
-			handleStyles = {
-				top: data.handleTop
-			};
+			data.$handle.css(handleStyles);
 		}
-
-		data.$handle.css(handleStyles);
 	}
 
 	/**
 	 * @method private
-	 * @name getPointer
-	 * @description Normalizes touch and mouse events
-	 * @param e [object] "Event data"
-	 * @return [object] "Pointer poisition data"
-	 */
-
-	function getPointer(e) {
-		var oe = e.originalEvent,
-			touch = ($.type(oe.targetTouches) !== "undefined") ? oe.targetTouches[0] : null;
-
-		return {
-			pageX: (touch) ? touch.pageX : e.clientX,
-			pageY: (touch) ? touch.pageY : e.clientY
-		};
-	}
-
-	/**
-	 * @method private
-	 * @name onTrackDown
-	 * @description Handles mousedown/touchstart event on track
+	 * @name onMouseWheel
+	 * @description Handles mousewheel event on content
 	 * @param e [object] "Event data"
 	 */
 
-	function onTrackDown(e) {
-		Functions.killEvent(e);
-
-		var data       = e.data,
-			pointer    = getPointer(e),
-			offset     = data.$track.offset();
+	function onMouseWheel(e) {
+		// http://stackoverflow.com/questions/5802467/prevent-scrolling-of-parent-element/16324762#16324762
+		var data = e.data,
+			delta,
+			direction;
 
 		if (data.horizontal) {
 			// Horizontal
-			data.pointerStart = pointer.pageX;
-			data.handleLeft = pointer.pageX - offset.left + $Window.scrollLeft() - (data.handleWidth / 2);
+			var scrollLeft   = data.$content[0].scrollLeft,
+				scrollWidth  = data.$content[0].scrollWidth,
+				width        = data.$content.outerWidth();
 
-			positionContent(data, data.handleLeft);
+			delta     = (e.type === "DOMMouseScroll") ? (e.originalEvent.detail * -40) : e.originalEvent.wheelDelta;
+			direction = (delta > 0) ? "right" : "left";
+
+			if (direction === "left" && -delta > (scrollWidth - width - scrollLeft)) {
+				data.$content.scrollLeft(scrollWidth);
+				return killEvent(e);
+			} else if (direction === "right" && delta > scrollLeft) {
+				data.$content.scrollLeft(0);
+				return killEvent(e);
+			}
 		} else {
 			// Vertical
-			data.pointerStart = pointer.pageY;
-			data.handleTop = pointer.pageY - offset.top + $Window.scrollTop() - (data.handleHeight / 2);
+			var scrollTop    = data.$content[0].scrollTop,
+				scrollHeight = data.$content[0].scrollHeight,
+				height       = data.$content.outerHeight();
 
-			positionContent(data, data.handleTop);
+			delta     = (e.type === "DOMMouseScroll") ? (e.originalEvent.detail * -40) : e.originalEvent.wheelDelta;
+			direction = (delta > 0) ? "up" : "down";
+
+			if (direction === "down" && -delta > (scrollHeight - height - scrollTop)) {
+				data.$content.scrollTop(scrollHeight);
+				return killEvent(e);
+			} else if (direction === "up" && delta > scrollTop) {
+				data.$content.scrollTop(0);
+				return killEvent(e);
+			}
 		}
-
-		onPointerStart(data);
 	}
 
 	/**
 	 * @method private
-	 * @name onHandleDown
-	 * @description Handles mousedown/touchstart event on handle
+	 * @name killEvent
+	 * @description Localized version of Formstone.killEvent()
 	 * @param e [object] "Event data"
 	 */
 
-	function onHandleDown(e) {
+	function killEvent(e) {
 		Functions.killEvent(e);
+		e.returnValue = false;
+		return false;
+	}
 
-		var data       = e.data,
-			pointer    = getPointer(e);
+	/**
+	 * @method private
+	 * @name onPanStart
+	 * @description Handles pan event on track
+	 * @param e [object] "Event data"
+	 */
+
+	function onPanStart(e) {
+		var data      = e.data,
+			offset    = data.$track.offset(),
+			handlePosition;
+
+		data.panning = true;
 
 		if (data.horizontal) {
-			// Horizontal
-			data.pointerStart = pointer.pageX;
-			data.handleLeft = parseInt(data.$handle.css("left"), 10);
+			handlePosition = data.handleLeft = e.pageX - offset.left /* + $Window.scrollLeft() */ - (data.handleWidth / 2);
 		} else {
-			// Vertical
-			data.pointerStart = pointer.pageY;
-			data.handleTop = parseInt(data.$handle.css("top"), 10);
+			handlePosition = data.handleTop = e.pageY - offset.top /* + $Window.scrollTop() */ - (data.handleHeight / 2);
 		}
 
-		onPointerStart(data);
+		positionContent(data, handlePosition);
 	}
 
-	/**
-	 * @method private
-	 * @name onStart
-	 * @description Handles mousedown/touchstart event
-	 * @param data [object] "Instance data"
-	 */
-
-	function onPointerStart(data) {
-		data.$content.off(Events.namespace);
-
-		$Body.on(Events.touchMouseMove, data, onPointerMove)
-			 .on(Events.touchMouseUp, data, onPointerEnd);
-	}
-
-	/**
-	 * @method private
-	 * @name onPointerMove
-	 * @description Handles mousemove/touchmove event
-	 * @param e [object] "Event data"
-	 */
-
-	function onPointerMove(e) {
-		Functions.killEvent(e);
-
-		var data        = e.data,
-			pointer     = getPointer(e),
-			position    = 0;
+	function onPan(e) {
+		var data = e.data,
+			handlePosition;
 
 		if (data.horizontal) {
-			// Horizontal
-			position = data.handleLeft - (data.pointerStart - pointer.pageX);
+			handlePosition = data.handleLeft + e.deltaX;
 		} else {
-			// Vertical
-			position = data.handleTop - (data.pointerStart - pointer.pageY);
+			handlePosition = data.handleTop + e.deltaY;
 		}
 
-		positionContent(data, position);
+		positionContent(data, handlePosition);
 	}
 
-	/**
-	 * @method private
-	 * @name onPointerEnd
-	 * @description Handles mouseup/touchend event
-	 * @param e [object] "Event data"
-	 */
+	function onPanEnd(e) {
+		var data = e.data;
 
-	function onPointerEnd(e) {
-		Functions.killEvent(e);
+		data.panning = false;
 
-		e.data.$content.on(Events.scroll, e.data, onScroll);
-		$Body.off(Events.namespace);
+		if (data.horizontal) {
+			data.handleLeft += e.deltaX;
+		} else {
+			data.handleTop += e.deltaY;
+		}
+
+		// positionContent(data, handlePosition);
 	}
 
 	/**
@@ -457,9 +470,13 @@
 	/**
 	 * @plugin
 	 * @name Scrollbar
-	 * @description A jQuery plugin for .
+	 * @description A jQuery plugin for custom scrollbars.
 	 * @type widget
+	 * @main scrollbar.js
+	 * @main scrollbar.css
+	 * @dependency jQuery
 	 * @dependency core.js
+	 * @dependency touch.js
 	 */
 
 	var Plugin = Formstone.Plugin("scrollbar", {
@@ -470,16 +487,18 @@
 			 * @param customClass [string] <''> "Class applied to instance"
 			 * @param duration [int] <0> "Scroll animation length"
 			 * @param handleSize [int] <0> "Handle size; 0 to auto size"
-			 * @param horizontal [boolean] <false> "Scroll horizontally"
+			 * @param horizontal [boolean] <false> "Flag to scroll horizontally"
+			 * @param mouseWheel [boolean] <true> "Flag to prevent scrolling of parent element"
 			 * @param trackMargin [int] <0> "Margin between track and handle edge”
 			 */
 
 			defaults: {
-				customClass: "",
-				duration: 0,
-				handleSize: 0,
-				horizontal: false,
-				trackMargin: 0
+				customClass    : "",
+				duration       : 0,
+				handleSize     : 0,
+				horizontal     : false,
+				mouseWheel     : true,
+				trackMargin    : 0
 			},
 
 			classes: [
@@ -514,9 +533,5 @@
 		$Body,
 		$Window        = Formstone.$window,
 		$Instances     = [];
-
-		Events.touchMouseDown    = [Events.touchStart, Events.mouseDown].join(" ");
-		Events.touchMouseMove    = [Events.touchMove,  Events.mouseMove].join(" ");
-		Events.touchMouseUp      = [Events.touchEnd,   Events.mouseUp].join(" ");
 
 })(jQuery, Formstone);

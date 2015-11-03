@@ -21,14 +21,10 @@
 
 	function construct(data) {
 		// guid
-		data.guid         = "__" + (GUID++);
-		data.eventGuid    = Events.namespace + data.guid;
-		data.rawGuid      = RawClasses.base + data.guid;
-		data.classGuid    = "." + data.rawGuid;
-
 		data.handleGuid   = RawClasses.handle + data.guid;
 
 		data.isToggle     = (data.type === "toggle");
+		data.open         = false;
 
 		if (data.isToggle) {
 			data.gravity  = "";
@@ -58,8 +54,12 @@
 
 		data.contentClasses = [
 			RawClasses.content.replace(baseClass, typeClass),
-			gravityClass ? RawClasses.content.replace(baseClass, gravityClass) : "",
 			classGroup
+		].join(" ");
+
+		data.contentClassesOpen = [
+			gravityClass ? RawClasses.content.replace(baseClass, gravityClass) : "",
+			RawClasses.open
 		].join(" ");
 
 		// DOM
@@ -69,23 +69,21 @@
 		data.$content    = $(data.content).addClass(data.contentClasses);
 		data.$animate    = $().add(data.$nav).add(data.$content);
 
-		if (data.label) {
-			data.originalLabel = data.$handle.text();
-		}
+		cacheLabel(data);
 
 		// toggle
 
-		data.$handle.attr("data-swap-target", data.classGuid)
-					.attr("data-swap-linked", "." + data.handleGuid)
+		data.$handle.attr("data-swap-target", data.dotGuid)
+					.attr("data-swap-linked", data.handleGuid)
 					.attr("data-swap-group", RawClasses.base)
-					.on("activate.swap" + data.eventGuid, data, onOpen)
-					.on("deactivate.swap" + data.eventGuid, data, onClose)
-					.on("enable.swap" + data.eventGuid, data, onEnable)
-					.on("disable.swap" + data.eventGuid, data, onDisable)
-					.swap({
+					.on("activate.swap" + data.dotGuid, data, onOpen)
+					.on("deactivate.swap" + data.dotGuid, data, onClose)
+					.on("enable.swap" + data.dotGuid, data, onEnable)
+					.on("disable.swap" + data.dotGuid, data, onDisable)
+					.fsSwap({
 						maxWidth: data.maxWidth,
 						classes: {
-							target  : data.classGuid,
+							target  : data.dotGuid,
 							enabled : Classes.enabled,
 							active  : Classes.open,
 							raw: {
@@ -105,7 +103,7 @@
 	 */
 
 	function destruct(data) {
-		data.$content.removeClass(data.contentClasses)
+		data.$content.removeClass( [data.contentClasses, data.contentClassesOpen].join(" ") )
 					 .off(Events.namespace);
 
 		data.$handle.removeAttr("data-swap-target")
@@ -113,9 +111,11 @@
 					.removeAttr("data-swap-linked")
 					.removeData("swap-linked")
 					.removeClass(data.handleClasses)
-					.off(data.eventGuid)
+					.off(data.dotGuid)
 					.text(data.originalLabel)
-					.swap("destroy");
+					.fsSwap("destroy");
+
+		restoreLabel(data);
 
 		clearLocks(data);
 
@@ -131,7 +131,7 @@
 	 */
 
 	function open(data) {
-		data.$handle.swap("activate");
+		data.$handle.fsSwap("activate");
 	}
 
 	/**
@@ -142,7 +142,7 @@
 	 */
 
 	function close(data) {
-		data.$handle.swap("deactivate");
+		data.$handle.fsSwap("deactivate");
 	}
 
 	/**
@@ -153,7 +153,7 @@
 	 */
 
 	function enable(data) {
-		data.$handle.swap("enable");
+		data.$handle.fsSwap("enable");
 	}
 
 	/**
@@ -164,7 +164,7 @@
 	 */
 
 	function disable(data) {
-		data.$handle.swap("disable");
+		data.$handle.fsSwap("disable");
 	}
 
 	/**
@@ -178,18 +178,22 @@
 		if (!e.originalEvent) { // thanks IE :/
 			var data = e.data;
 
-			data.$el.trigger(Events.open);
+			if (!data.open) {
+				data.$el.trigger(Events.open);
 
-			data.$content.addClass(RawClasses.open)
-						 .one(Events.clickTouchStart, function() {
-							close(data);
-						 });
+				data.$content.addClass(data.contentClassesOpen)
+							 .one(Events.click, function() {
+								close(data);
+							 });
 
-			if (data.label) {
-				data.$handle.text(data.labels.open);
+				if (data.label) {
+					data.$handle.text(data.labels.open);
+				}
+
+				addLocks(data);
+
+				data.open = true;
 			}
-
-			addLocks(data);
 		}
 	}
 
@@ -204,16 +208,20 @@
 		if (!e.originalEvent) { // thanks IE :/
 			var data = e.data;
 
-			data.$el.trigger(Events.close);
+			if (data.open) {
+				data.$el.trigger(Events.close);
 
-			data.$content.removeClass(RawClasses.open)
-						 .off(Events.namespace);
+				data.$content.removeClass(data.contentClassesOpen)
+							 .off(Events.namespace);
 
-			if (data.label) {
-				data.$handle.text(data.labels.closed);
+				if (data.label) {
+					data.$handle.text(data.labels.closed);
+				}
+
+				clearLocks(data);
+
+				data.open = false;
 			}
-
-			clearLocks(data);
 		}
 	}
 
@@ -251,9 +259,7 @@
 		data.$content.removeClass(RawClasses.enabled, RawClasses.animated);
 		data.$animate.removeClass(RawClasses.animated);
 
-		if (data.label) {
-			data.$handle.text(data.originalLabel);
-		}
+		restoreLabel(data);
 
 		clearLocks(data);
 	}
@@ -285,14 +291,56 @@
 	}
 
 	/**
+	 * @method private
+	 * @name cacheLabel
+	 * @description Sets handle labels
+	 * @param data [object] "Instance data"
+	 */
+
+	function cacheLabel(data) {
+		if (data.label) {
+			if (data.$handle.length > 1) {
+				data.originalLabel = [];
+
+				for (var i = 0, count = data.$handle.length; i < count; i++) {
+					data.originalLabel[i] = data.$handle.eq(i).text();
+				}
+			} else {
+				data.originalLabel = data.$handle.text();
+			}
+		}
+	}
+
+	/**
+	 * @method private
+	 * @name restoreLabel
+	 * @description restores handle labels
+	 * @param data [object] "Instance data"
+	 */
+
+	function restoreLabel(data) {
+		if (data.label) {
+			if (data.$handle.length > 1) {
+				for (var i = 0, count = data.$handle.length; i < count; i++) {
+					data.$handle.eq(i).text(data.originalLabel[i]);
+				}
+			} else {
+				data.$handle.text(data.originalLabel);
+			}
+		}
+	}
+
+	/**
 	 * @plugin
 	 * @name Navigation
 	 * @description A jQuery plugin for simple responsive navigation.
 	 * @type widget
+	 * @main navigation.js
+	 * @main navigation.css
+	 * @dependency jQuery
 	 * @dependency core.js
 	 * @dependency mediaquery.js
 	 * @dependency swap.js
-	 * @dependency touch.js
 	 */
 
 	var Plugin = Formstone.Plugin("navigation", {
@@ -344,7 +392,6 @@
 			 */
 
 			events: {
-				tap      : "tap",
 				open     : "open",
 				close    : "close"
 			},
@@ -373,7 +420,6 @@
 
 		// Internal
 
-		GUID          = 0,
 		$Locks        = null;
 
 })(jQuery, Formstone);

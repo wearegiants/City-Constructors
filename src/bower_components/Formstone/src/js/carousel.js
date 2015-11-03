@@ -30,11 +30,17 @@
 	 */
 
 	function construct(data) {
-		var i;
+		var i,
+			carouselClasses = [
+				RawClasses.base,
+				data.customClass,
+				(data.rtl ? RawClasses.rtl : RawClasses.ltr)
+			];
 
 		data.maxWidth = (data.maxWidth === Infinity ? "100000px" : data.maxWidth);
 		data.mq       = "(min-width:" + data.minWidth + ") and (max-width:" + data.maxWidth + ")";
-		data.mqGuid   = RawClasses.base + "__" + (GUID++);
+
+		data.customControls = ($.type(data.controls) === "object" && data.controls.previous && data.controls.next);
 
 		// Legacy browser support
 		if (!Formstone.support.transform) {
@@ -43,12 +49,14 @@
 
 		// Build controls and pagination
 		var controlsHtml = '',
-			paginationHtml = '';
+			paginationHtml = '',
+			controlPrevClasses = [RawClasses.control, RawClasses.control_previous].join(" "),
+			controlNextClasses = [RawClasses.control, RawClasses.control_next].join(" ");
 
-		if (data.controls) {
+		if (data.controls && !data.customControls) {
 			controlsHtml += '<div class="' + RawClasses.controls + '">';
-			controlsHtml += '<button type="button" class="' + [RawClasses.control, RawClasses.control_previous].join(" ")+ '">' + data.labels.previous + '</button>';
-			controlsHtml += '<button type="button" class="' + [RawClasses.control, RawClasses.control_next].join(" ")+ '">' + data.labels.next + '</button>';
+			controlsHtml += '<button type="button" class="' + controlPrevClasses + '">' + data.labels.previous + '</button>';
+			controlsHtml += '<button type="button" class="' + controlNextClasses + '">' + data.labels.next + '</button>';
 			controlsHtml += '</div>';
 		}
 
@@ -57,8 +65,20 @@
 			paginationHtml += '</div>';
 		}
 
+		if (data.autoHeight) {
+			carouselClasses.push(RawClasses.auto_height);
+		}
+
+		if (data.contained) {
+			carouselClasses.push(RawClasses.contained);
+		}
+
+		if (data.single) {
+			carouselClasses.push(RawClasses.single);
+		}
+
 		// Modify dom
-		this.addClass( [RawClasses.base, data.customClass].join(" ") )
+		this.addClass( carouselClasses.join(" ") )
 			.wrapInner('<div class="' + RawClasses.wrapper + '"><div class="' + RawClasses.container + '"><div class="' + RawClasses.canister + '"></div></div></div>')
 			.append(controlsHtml)
 			.wrapInner('<div class="' + RawClasses.viewport + '"></div>')
@@ -67,22 +87,34 @@
 		data.$viewport           = this.find(Classes.viewport).eq(0);
 		data.$container          = this.find(Classes.container).eq(0);
 		data.$canister           = this.find(Classes.canister).eq(0);
-		data.$controls           = this.find(Classes.controls).eq(0);
 		data.$pagination         = this.find(Classes.pagination).eq(0);
-		data.$items              = data.$canister.children().addClass(RawClasses.item);
-		data.$controlItems       = data.$controls.find(Classes.control);
 		data.$paginationItems    = data.$pagination.find(Classes.page);
-		data.$images             = data.$canister.find("img");
+
+		data.$controlPrevious = data.$controlNext = $('');
+
+		if (data.customControls) {
+			data.$controls        = $(data.controls.container).addClass( [RawClasses.controls, RawClasses.controls_custom].join(" ") );
+			data.$controlPrevious = $(data.controls.previous).addClass(controlPrevClasses);
+			data.$controlNext     = $(data.controls.next).addClass(controlNextClasses);
+		} else {
+			data.$controls        = this.find(Classes.controls).eq(0);
+			data.$controlPrevious = data.$controls.find(Classes.control_previous);
+			data.$controlNext     = data.$controls.find(Classes.control_next);
+		}
+
+		data.$controlItems = data.$controlPrevious.add(data.$controlNext);
 
 		data.index           = 0;
 		data.enabled         = false;
 		data.leftPosition    = 0;
-		data.totalImages     = data.$images.length;
 		data.autoTimer       = null;
+		data.resizeTimer     = null;
 
+		// Responsive count handling
 		if ($.type(data.show) === "object") {
-			var show = data.show,
-				keys = [];
+			var show     = data.show,
+				cache    = [],
+				keys     = [];
 
 			for (i in show) {
 				if (show.hasOwnProperty(i)) {
@@ -91,20 +123,24 @@
 			}
 
 			keys.sort(Functions.sortAsc);
-			data.show = {};
 
 			for (i in keys) {
 				if (keys.hasOwnProperty(i)) {
-					data.show[ keys[i] ] = {
-						width: parseInt( keys[i] ),
-						count: show[ keys[i] ]
-					};
+					cache.push({
+						width    : parseInt( keys[i] ),
+						count    : show[ keys[i] ],
+						mq       : window.matchMedia( "(min-width: " + parseInt( keys[i] ) + "px)" )
+					});
 				}
 			}
+
+			data.show = cache;
 		}
 
+		cacheValues(data);
+
 		// Media Query support
-		$.mediaquery("bind", data.mqGuid, data.mq, {
+		$.fsMediaquery("bind", data.rawGuid, data.mq, {
 			enter: function() {
 				enable.call(data.$el, data);
 			},
@@ -112,26 +148,6 @@
 				disable.call(data.$el, data);
 			}
 		});
-
-		// Watch Images
-		if (data.totalImages > 0) {
-			data.loadedImages = 0;
-			for (i = 0; i < data.totalImages; i++) {
-				var $img = data.$images.eq(i);
-				$img.one(Events.load, data, onImageLoad);
-
-				if ($img[0].complete || $img[0].height) {
-					$img.trigger(Events.load);
-				}
-			}
-		}
-
-		// Auto timer
-		if (data.autoAdvance) {
-			data.autoTimer = Functions.startTimer(data.autoTimer, data.autoTime, function() {
-				autoAdvance(data);
-			}, true);
-		}
 
 		cacheInstances();
 	}
@@ -145,22 +161,35 @@
 
 	function destruct(data) {
 		Functions.clearTimer(data.autoTimer);
+		Functions.startTimer(data.resizeTimer);
 
 		disable.call(this, data);
 
-		$.mediaquery("unbind", data.mqGuid, data.mq);
+		$.fsMediaquery("unbind", data.rawGuid);
 
-		data.$items.removeClass( [RawClasses.item, RawClasses.visible].join(" ") )
-				   .unwrap().unwrap();
+		data.$controlItems.removeClass( [Classes.control, RawClasses.control_previous, Classes.control_next, Classes.visible].join(" ") )
+			.off(Events.namespace);
+
+		data.$images.off(Events.namespace);
+		data.$canister.fsTouch("destroy");
+
+		data.$items.removeClass( [RawClasses.item, RawClasses.visible, Classes.item_previous, Classes.item_next].join(" ") )
+				.unwrap()
+				.unwrap()
+				.unwrap()
+				.unwrap();
 
 		if (data.pagination) {
 			data.$pagination.remove();
 		}
-		if (data.controls) {
+		if (data.controls && !data.customControls) {
 			data.$controls.remove();
 		}
+		if (data.customControls) {
+			data.$controls.removeClass( [RawClasses.controls, RawClasses.controls_custom, RawClasses.visible ].join(" ") );
+		}
 
-		this.removeClass( [RawClasses.base, RawClasses.enabled, RawClasses.animated, data.customClass].join(" ") );
+		this.removeClass( [RawClasses.base, RawClasses.ltr, RawClasses.rtl, RawClasses.enabled, RawClasses.animated, RawClasses.contained, RawClasses.single, RawClasses.auto_height, RawClasses.customClass].join(" ") );
 
 		cacheInstances();
 	}
@@ -181,19 +210,21 @@
 			this.removeClass( [RawClasses.enabled, RawClasses.animated].join(" ") )
 				.off(Events.namespace);
 
-			data.$canister.touch("destroy")
+			data.$canister.fsTouch("destroy")
 						  .off(Events.namespace)
 						  .attr("style", "")
 						  .css(TransitionProperty, "none");
 
 			data.$items.css({
-				width: "",
+				width:  "",
 				height: ""
-			});
+			}).removeClass( [RawClasses.visible, Classes.item_previous, Classes.item_next].join(" ") );
 
-			data.$controls.removeClass(RawClasses.visible);
-			data.$pagination.removeClass(RawClasses.visible)
-							.html("");
+			data.$images.off(Events.namespace);
+			data.$controlItems.off(Events.namespace);
+			data.$pagination.html("");
+
+			hideControls(data);
 
 			if (data.useMargin) {
 				data.$canister.css({
@@ -219,10 +250,12 @@
 			data.enabled = true;
 
 			this.addClass(RawClasses.enabled)
-				.on(Events.clickTouchStart, Classes.control, data, onAdvance)
-				.on(Events.clickTouchStart, Classes.page, data, onSelect);
+				// .on(Events.click, Classes.control, data, onAdvance)
+				.on(Events.click, Classes.page, data, onSelect);
 
-			data.$canister.touch({
+			data.$controlItems.on(Events.click, data, onAdvance);
+
+			data.$canister.fsTouch({
 				axis: "x",
 				pan: true,
 				swipe: true
@@ -231,6 +264,18 @@
 			  .on(Events.panEnd, data, onPanEnd)
 			  .on(Events.swipe, data, onSwipe)
 			  .css(TransitionProperty, "");
+
+			cacheValues(data);
+
+			// Watch Images
+			data.$images.on(Events.load, data, onImageLoad);
+
+			// Auto timer
+			if (data.autoAdvance) {
+				data.autoTimer = Functions.startTimer(data.autoTimer, data.autoTime, function() {
+					autoAdvance(data);
+				}, true);
+			}
 
 			resizeInstance.call(this, data);
 		}
@@ -252,47 +297,58 @@
 
 	function resizeInstance(data) {
 		if (data.enabled) {
-			var i,
-				j,
+			var h, i, j, k,
 				$items,
 				$first,
-				height;
+				height,
+				left;
 
 			data.count = data.$items.length;
 
 			if (data.count < 1) { // avoid empty carousels
+				hideControls(data);
+				data.$canister.css({
+					height: ""
+				});
+
 				return;
 			}
 
 			this.removeClass(RawClasses.animated);
 
-			// data.viewportWidth  = data.$viewport.outerWidth(false);
 			data.containerWidth = data.$container.outerWidth(false);
 
 			data.visible   = calculateVisible(data);
 			data.perPage   = data.paged ? 1 : data.visible;
 
 			data.itemMargin = parseInt(data.$items.eq(0).css("marginRight")) + parseInt(data.$items.eq(0).css("marginLeft"));
+			if (isNaN(data.itemMargin)) {
+				data.itemMargin = 0; // Catch bad values
+			}
+
 			data.itemWidth  = (data.containerWidth - (data.itemMargin * (data.visible - 1))) / data.visible;
 			data.itemHeight = 0;
 
 			data.pageWidth = data.paged ? data.itemWidth : data.containerWidth;
 			data.pageCount = Math.ceil(data.count / data.perPage);
 
+			data.canisterWidth = ((data.pageWidth + data.itemMargin) * data.pageCount);
 			data.$canister.css({
-				width: ((data.pageWidth + data.itemMargin) * data.pageCount)
+				width:  data.canisterWidth,
+				height: ""
 			});
 
 			data.$items.css({
-				width: data.itemWidth,
+				width:  data.itemWidth,
 				height: ""
-			}).removeClass(RawClasses.visible);
+			}).removeClass( [RawClasses.visible, RawClasses.item_previous, RawClasses.item_next].join(" ") );
 
 			// initial page
 			data.pages = [];
 
 			for (i = 0, j = 0; i < data.count; i += data.perPage) {
 				$items = data.$items.slice(i, i + data.perPage);
+				height = 0;
 
 				if ($items.length < data.perPage) {
 					if (i === 0) {
@@ -302,11 +358,23 @@
 					}
 				}
 
-				$first = $items.eq(0);
-				height = $first.outerHeight();
+				$first = data.rtl ? $items.eq( $items.length - 1 ) : $items.eq(0);
+				left   = $first.position().left;
+
+				// if (data.autoHeight) {
+					for (k = 0; k < $items.length; k++) {
+						h = $items.eq(k).outerHeight();
+
+						if (h > height) {
+							height = h;
+						}
+					}
+				// } else {
+				// 	height = $first.outerHeight();
+				// }
 
 				data.pages.push({
-					left      : $first.position().left,
+					left      : data.rtl ? left - (data.canisterWidth - data.pageWidth - data.itemMargin) : left,
 					height    : height,
 					$items    : $items
 				});
@@ -322,10 +390,18 @@
 				data.pageCount -= (data.count % data.visible);
 			}
 
+			if (data.pageCount <= 0) {
+				data.pageCount = 1;
+			}
+
 			data.maxMove = -data.pages[ data.pageCount - 1 ].left;
 
-			// auto height
+			// auto / match height
 			if (data.autoHeight) {
+				data.$canister.css({
+					height: data.pages[0].height
+				});
+			} else if (data.matchHeight) {
 				data.$items.css({
 					height: data.itemHeight
 				});
@@ -340,11 +416,9 @@
 
 			// update pagination
 			if (data.pageCount <= 1) {
-				data.$controls.removeClass(RawClasses.visible);
-				data.$pagination.removeClass(RawClasses.visible);
+				hideControls(data);
 			} else {
-				data.$controls.addClass(RawClasses.visible);
-				data.$pagination.addClass(RawClasses.visible);
+				showControls(data);
 			}
 			data.$paginationItems = data.$el.find(Classes.page);
 
@@ -354,6 +428,21 @@
 				data.$el.addClass(RawClasses.animated);
 			}, 5);
 		}
+	}
+
+	/**
+	 * @method private
+	 * @name cacheValues
+	 * @description Caches internal values after item change
+	 * @param data [object] "Instance data"
+	 */
+
+	function cacheValues(data) {
+		// Cache vaules
+		data.$items      = data.$canister.children().not(":hidden").addClass(RawClasses.item);
+		data.$images     = data.$canister.find("img");
+
+		data.totalImages = data.$images.length;
 	}
 
 	/**
@@ -372,10 +461,37 @@
 
 	function resetInstance(data) {
 		if (data.enabled) {
-			data.$items = data.$canister.children().addClass(RawClasses.item);
-
-			resizeInstance.call(this, data);
+			updateItems.call(this, data, false);
 		}
+	}
+
+	/**
+	 * @method
+	 * @name update
+	 * @description Updates carousel items
+	 * @example $(".target").carousel("update", "...");
+	 */
+
+	/**
+	 * @method private
+	 * @name updateItems
+	 * @description Updates carousel items for each instance
+	 * @param data [object] "Instance data"
+	 * @param html [string] "New carousel contents"
+	 */
+
+	function updateItems(data, html) {
+		data.$images.off(Events.namespace);
+
+		if (html !== false) {
+			data.$canister.html(html);
+		}
+
+		data.index = 0;
+
+		cacheValues(data);
+
+		resizeInstance.call(this, data);
 	}
 
 	/**
@@ -383,6 +499,8 @@
 	 * @name jump
 	 * @description Jump instance of plugin to specific page
 	 * @example $(".target").carousel("jump", 1);
+	 * @param index [int] "New index"
+	 * @param silent [boolean] "Flag to prevent triggering update event"
 	 */
 
 	/**
@@ -391,13 +509,14 @@
 	 * @description Jump instance of plugin to specific page
 	 * @param data [object] "Instance data"
 	 * @param index [int] "New index"
+	 * @param silent [boolean] ""
 	 */
 
-	function jumpToItem(data, index) {
+	function jumpToItem(data, index, silent) {
 		if (data.enabled) {
 			Functions.clearTimer(data.autoTimer);
 
-			positionCanister(data, index - 1);
+			positionCanister(data, index - 1, true, silent);
 		}
 	}
 
@@ -411,7 +530,7 @@
 	/**
 	 * @method private
 	 * @name previousItem
-	 * @description Move to next item
+	 * @description Move to previous item
 	 * @param data [object] "Instance data"
 	 */
 
@@ -429,7 +548,6 @@
 	 * @method
 	 * @name next
 	 * @description Move to next item
-	 * @param data [object] "Instance data"
 	 */
 
 	/**
@@ -437,6 +555,7 @@
 	 * @name nextItem
 	 * @description Move to next item
 	 * @example $(".target").carousel("next");
+	 * @param data [object] "Instance data"
 	 */
 
 	function nextItem(data) {
@@ -459,11 +578,9 @@
 	function onImageLoad(e) {
 		var data = e.data;
 
-		data.loadedImages++;
-
-		if (data.loadedImages === data.totalImages) {
+		data.resizeTimer = Functions.startTimer(data.resizeTimer, 20, function() {
 			resizeInstance.call(data.$el, data);
-		}
+		});
 	}
 
 	/**
@@ -525,7 +642,7 @@
 	 * @param index [int] "Item index"
 	 */
 
-	function positionCanister(data, index, animate) {
+	function positionCanister(data, index, animate, silent) {
 		if (index < 0) {
 			index = (data.infinite) ? data.pageCount-1 : 0;
 		}
@@ -533,16 +650,15 @@
 			index = (data.infinite) ? 0 : data.pageCount-1;
 		}
 
+		if (data.count < 1) {
+			return;
+		}
+
 		if (data.pages[index]) {
 			data.leftPosition = -data.pages[index].left;
 		}
 
-		if (data.leftPosition < data.maxMove) {
-			data.leftPosition = data.maxMove;
-		}
-		if (data.leftPosition > 0 || isNaN(data.leftPosition)) {
-			data.leftPosition = 0;
-		}
+		data.leftPosition = checkPosition(data, data.leftPosition);
 
 		if (data.useMargin) {
 			data.$canister.css({
@@ -563,16 +679,58 @@
 		}
 
 		// Update classes
-		data.$items.removeClass(RawClasses.visible);
-		data.pages[index].$items.addClass(RawClasses.visible);
+		data.$items.removeClass( [RawClasses.visible, RawClasses.item_previous, RawClasses.item_next].join(" ") );
 
-		if (animate !== false && index !== data.index && (data.infinite || (index > -1 && index < data.pageCount)) ) {
+
+		for (var i = 0, count = data.pages.length; i < count; i++) {
+			if (i === index) {
+				data.pages[i].$items.addClass(RawClasses.visible);
+			} else {
+				data.pages[i].$items.not( data.pages[index].$items ).addClass( (i < index) ? RawClasses.item_previous : RawClasses.item_next );
+			}
+		}
+
+
+		// Auto Height
+		if (data.autoHeight) {
+			data.$canister.css({
+				height: data.pages[index].height
+			});
+		}
+
+		if (animate !== false && silent !== true && index !== data.index && (data.infinite || (index > -1 && index < data.pageCount)) ) {
 			data.$el.trigger(Events.update, [ index ]);
 		}
 
 		data.index = index;
 
 		updateControls(data);
+	}
+
+	/**
+	 * @method private
+	 * @name hideControls
+	 * @description Hides instance controls
+	 * @param data [object] "Instance data"
+	 */
+
+	function hideControls(data) {
+		data.$controls.removeClass(RawClasses.visible);
+		data.$controlItems.removeClass(RawClasses.visible);
+		data.$pagination.removeClass(RawClasses.visible);
+	}
+
+	/**
+	 * @method private
+	 * @name showControls
+	 * @description Shows instance controls
+	 * @param data [object] "Instance data"
+	 */
+
+	function showControls(data) {
+		data.$controls.addClass(RawClasses.visible);
+		data.$controlItems.addClass(RawClasses.visible);
+		data.$pagination.addClass(RawClasses.visible);
 	}
 
 	/**
@@ -595,9 +753,9 @@
 			data.$controlItems.addClass(RawClasses.visible);
 
 			if (data.index <= 0) {
-				data.$controlItems.filter(Classes.control_previous).removeClass(RawClasses.visible);
-			} else if (data.index >= data.pageCount || data.leftPosition === data.maxMove) {
-				data.$controlItems.filter(Classes.control_next).removeClass(RawClasses.visible);
+				data.$controlPrevious.removeClass(RawClasses.visible);
+			} else if (data.index >= data.pageCount - 1 || (!data.single && data.leftPosition === data.maxMove)) {
+				data.$controlNext.removeClass(RawClasses.visible);
 			}
 		}
 	}
@@ -611,16 +769,30 @@
 	 */
 
 	function calculateVisible(data) {
-		if ($.type(data.show) === "object") {
+		var show = 1;
+
+		if (data.single) {
+			return show;
+		} else if ($.type(data.show) === "array") {
 			for (var i in data.show) {
-				if (data.show.hasOwnProperty(i) && Formstone.windowWidth >= data.show[i].width) {
-					return (data.fill && data.count < data.show[i].count) ? data.count : data.show[i].count;
+				if (data.show.hasOwnProperty(i)) {
+					if (Formstone.support.nativeMatchMedia) {
+						if (data.show[i].mq.matches) {
+							show = data.show[i].count;
+						}
+					} else {
+						// ie8 fallback, grab the first breakpoint that's large enough
+						if (data.show[i].width < Formstone.fallbackWidth) {
+							show = data.show[i].count;
+						}
+					}
 				}
 			}
-			return 1;
+		} else {
+			show = data.show;
 		}
 
-		return (data.fill && data.count < data.show) ? data.count : data.show;
+		return (data.fill && data.count < show) ? data.count : show;
 	}
 
 	/**
@@ -657,14 +829,7 @@
 	function onPan(e) {
 		var data = e.data;
 
-		data.touchLeft = data.leftPosition + e.deltaX;
-
-		if (data.touchLeft > 0) {
-			data.touchLeft = 0;
-		}
-		if (data.touchLeft < data.maxMove) {
-			data.touchLeft = data.maxMove;
-		}
+		data.touchLeft = checkPosition(data, data.leftPosition + e.deltaX);
 
 		if (data.useMargin) {
 			data.$canister.css({
@@ -683,8 +848,9 @@
 	 */
 
 	function onPanEnd(e) {
-		var data = e.data,
-			index = (e.deltaX > -50 && e.deltaX < 50) ? data.index : data.index + ((e.directionX === "left") ? 1 : -1);
+		var data      = e.data,
+			increment = getIncrement(data, e),
+			index     = (e.deltaX > -50 && e.deltaX < 50) ? data.index : data.index + increment;
 
 		endTouch(data, index);
 	}
@@ -697,8 +863,9 @@
 	 */
 
 	function onSwipe(e) {
-		var data = e.data,
-			index = data.index + ((e.directionX === "left") ? 1 : -1);
+		var data      = e.data,
+			increment = getIncrement(data, e),
+			index     = data.index + increment;
 
 		endTouch(data, index);
 	}
@@ -720,10 +887,57 @@
 	}
 
 	/**
+	 * @method private
+	 * @name checkPosition
+	 * @description Checks if left pos is in range
+	 * @param data [object] "Event data"
+	 * @param e [object] "Event data"
+	 * @return [int] "Corrected left position"
+	 */
+
+	function checkPosition(data, pos) {
+		if (isNaN(pos)) {
+			pos = 0;
+		} else if (data.rtl) {
+			if (pos > data.maxMove) {
+				pos = data.maxMove;
+			}
+			if (pos < 0) {
+				pos = 0;
+			}
+		} else {
+			if (pos < data.maxMove) {
+				pos = data.maxMove;
+			}
+			if (pos > 0) {
+				pos = 0;
+			}
+		}
+
+		return pos;
+	}
+
+	/**
+	 * @method private
+	 * @name getIncrement
+	 * @description Returns touch increment
+	 * @param data [object] "Instance data"
+	 * @param e [object] "Event data"
+	 * @return [int] "Target direction"
+	 */
+
+	function getIncrement(data, e) {
+		return data.rtl ? ((e.directionX === "right") ? 1 : -1) : ((e.directionX === "left") ? 1 : -1);
+	}
+
+	/**
 	 * @plugin
 	 * @name Carousel
 	 * @description A jQuery plugin for simple content carousels.
 	 * @type widget
+	 * @main carousel.js
+	 * @main carousel.css
+	 * @dependency jQuery
 	 * @dependency core.js
 	 * @dependency mediaquery.js
 	 * @dependency touch.js
@@ -735,19 +949,22 @@
 			/**
 			 * @options
 			 * @param autoAdvance [boolean] <false> "Flag to auto advance items"
-			 * @param autoHeight [boolean] <false> "Flag to auto-size items"
+			 * @param autoHeight [boolean] <false> "Flag to adjust carousel height to visible item(s)"
 			 * @param autoTime [int] <8000> "Auto advance time"
-			 * @param controls [boolean] <true> "Flag to draw controls"
+			 * @param contained [boolean] <true> "Flag for 'overflow: visible'"
+			 * @param controls [boolean or object] <true> "Flag to draw controls OR object containing container, next and previous control selectors"
 			 * @param customClass [string] <''> "Class applied to instance"
 			 * @param fill [boolean] <false> "Flag to fill viewport if item count is less then show count"
 			 * @param infinite [boolean] <false> "Flag for looping items"
 			 * @param labels.next [string] <'Next'> "Control text"
 			 * @param labels.previous [string] <'Previous'> "Control text"
+			 * @param matchHeight [boolean] <false> "Flag to match item heights"
 			 * @param maxWidth [string] <'Infinity'> "Width at which to auto-disable plugin"
 			 * @param minWidth [string] <'0'> "Width at which to auto-disable plugin"
 			 * @param paged [boolean] <false> "Flag for paged items"
 			 * @param pagination [boolean] <true> "Flag to draw pagination"
 			 * @param show [int / object] <1> "Items visible per page; Object for responsive counts"
+			 * @param rtl [boolean] <false> "Right to Left display"
 			 * @param useMargin [boolean] <false> "Use margins instead of css transitions (legacy browser support)"
 			 */
 
@@ -755,6 +972,7 @@
 				autoAdvance    : false,
 				autoHeight     : false,
 				autoTime       : 8000,
+				contained      : true,
 				controls       : true,
 				customClass    : "",
 				fill           : false,
@@ -763,22 +981,37 @@
 					next       : "Next",
 					previous   : "Previous"
 				},
+				matchHeight    : false,
 				maxWidth       : Infinity,
 				minWidth       : '0px',
 				paged          : false,
 				pagination     : true,
 				show           : 1,
+				single         : false,
+				rtl            : false,
 				useMargin      : false
 			},
 
 			classes: [
+				"ltr",
+				"rtl",
+
 				"viewport",
 				"wrapper",
 				"container",
 				"canister",
+
 				"item",
+				"item_previous",
+				"item_next",
+
 				"controls",
+				"controls_custom",
+
 				"control",
+				"control_previous",
+				"control_next",
+
 				"pagination",
 				"page",
 
@@ -786,9 +1019,9 @@
 				"enabled",
 				"visible",
 				"active",
-
-				"control_previous",
-				"control_next"
+				"auto_height",
+				"contained",
+				"single"
 			],
 
 			/**
@@ -797,11 +1030,7 @@
 			 */
 
 			events: {
-				update      : "update",
-				panStart    : "panstart",
-				pan         : "pan",
-				panEnd      : "panend",
-				swipe       : "swipe"
+				update      : "update"
 			},
 
 			methods: {
@@ -815,7 +1044,8 @@
 				previous      : previousItem,
 				next          : nextItem,
 				reset         : resetInstance,
-				resize        : resizeInstance
+				resize        : resizeInstance,
+				update        : updateItems,
 			}
 		}),
 
@@ -825,7 +1055,6 @@
 		RawClasses     = Classes.raw,
 		Events         = Plugin.events,
 		Functions      = Plugin.functions,
-		GUID           = 0,
 
 		$Instances     = [],
 

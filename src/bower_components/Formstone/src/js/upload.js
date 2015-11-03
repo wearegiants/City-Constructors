@@ -17,8 +17,8 @@
 			html += data.label;
 			html += '</div>';
 			html += '<input class="' + RawClasses.input + '" type="file"';
-			if (data.maxQueue > 1) {
-				html += ' ' + RawClasses.multiple;
+			if (data.multiple) {
+				html += ' multiple';
 			}
 			html += '>';
 
@@ -29,6 +29,8 @@
 			data.queue        = [];
 			data.total        = 0;
 			data.uploading    = false;
+			data.disabled     = true;
+			data.aborting     = false;
 
 			this.on(Events.click, Classes.target, data, onClick)
 				.on(Events.dragEnter, data, onDragEnter)
@@ -37,6 +39,8 @@
 				.on(Events.drop, Classes.target, data, onDrop);
 
 			data.$input.on(Events.change, data, onChange);
+
+			enableUpload.call(this, data);
 		}
 	}
 
@@ -59,17 +63,98 @@
 
 	/**
 	 * @method private
+	 * @name abortUpload
+	 * @description Cancels all active uploads.
+	 * @param data [object] "Instance data"
+	 */
+
+	/**
+	 * @method
+	 * @name abort
+	 * @description Cancels all active uploads.
+	 * @example $(".target").upload("abort");
+	 */
+
+	function abortUpload(data, index) {
+		var file;
+
+		data.aborting = true;
+
+		for (var i in data.queue) {
+			if (data.queue.hasOwnProperty(i)) {
+				file = data.queue[i];
+
+				if ($.type(index) === "undefined" || (index >= 0 && file.index === index)) {
+					// Abort all
+					if (file.started && !file.complete) {
+						file.transfer.abort();
+					} else {
+						abortFile(data, file, "abort");
+					}
+				}
+			}
+		}
+
+		data.aborting = false;
+
+		checkQueue(data);
+	}
+
+	function abortFile(data, file, error) {
+		file.error = true;
+		data.$el.trigger(Events.fileError, [ file, error ]);
+
+		if (!data.aborting) {
+			checkQueue(data);
+		}
+	}
+
+	/**
+	 * @method
+	 * @name disable
+	 * @description Disables target instance.
+	 * @example $(".target").upload("disable");
+	 */
+
+	function disableUpload(data) {
+		if (!data.disabled) {
+			this.addClass(RawClasses.disabled);
+			data.$input.prop("disabled", true);
+
+			data.disabled = true;
+		}
+	}
+
+	/**
+	 * @method
+	 * @name enable
+	 * @description Enables target instance.
+	 * @example $(".target").upload("enable");
+	 */
+
+	function enableUpload(data) {
+		if (data.disabled) {
+			this.removeClass(RawClasses.disabled);
+			data.$input.prop("disabled", false);
+
+			data.disabled = false;
+		}
+	}
+
+	/**
+	 * @method private
 	 * @name onClick
 	 * @description Handles click to target.
 	 * @param e [object] "Event data"
 	 */
 	function onClick(e) {
-		e.stopPropagation();
-		e.preventDefault();
+		Functions.killEvent(e);
 
 		var data = e.data;
 
-		data.$input.trigger(Events.click);
+		if (!data.disabled) {
+			data.$input.trigger(Events.click);
+		}
 	}
 
 	/**
@@ -79,13 +164,12 @@
 	 * @param e [object] "Event data"
 	 */
 	function onChange(e) {
-		e.stopPropagation();
-		e.preventDefault();
+		Functions.killEvent(e);
 
 		var data = e.data,
 			files = data.$input[0].files;
 
-		if (files.length) {
+		if (!data.disabled && files.length) {
 			handleUpload(data, files);
 		}
 	}
@@ -97,12 +181,13 @@
 	 * @param e [object] "Event data"
 	 */
 	function onDragEnter(e) {
-		e.stopPropagation();
-		e.preventDefault();
+		Functions.killEvent(e);
 
 		var data = e.data;
 
-		data.$el.addClass(RawClasses.dropping);
+		// if (!data.disabled) {
+			data.$el.addClass(RawClasses.dropping);
+		// }
 	}
 
 	/**
@@ -112,12 +197,13 @@
 	 * @param e [object] "Event data"
 	 */
 	function onDragOver(e) {
-		e.stopPropagation();
-		e.preventDefault();
+		Functions.killEvent(e);
 
 		var data = e.data;
 
-		data.$el.addClass(RawClasses.dropping);
+		// if (!data.disabled) {
+			data.$el.addClass(RawClasses.dropping);
+		// }
 	}
 
 	/**
@@ -127,12 +213,13 @@
 	 * @param e [object] "Event data"
 	 */
 	function onDragOut(e) {
-		e.stopPropagation();
-		e.preventDefault();
+		Functions.killEvent(e);
 
 		var data = e.data;
 
-		data.$el.removeClass(RawClasses.dropping);
+		// if (!data.disabled) {
+			data.$el.removeClass(RawClasses.dropping);
+		// }
 	}
 
 	/**
@@ -142,14 +229,16 @@
 	 * @param e [object] "Event data"
 	 */
 	function onDrop(e) {
-		e.preventDefault();
+		Functions.killEvent(e);
 
 		var data = e.data,
 			files = e.originalEvent.dataTransfer.files;
 
 		data.$el.removeClass(RawClasses.dropping);
 
-		handleUpload(data, files);
+		if (!data.disabled) {
+			handleUpload(data, files);
+		}
 	}
 
 	/**
@@ -160,6 +249,8 @@
 	 * @param files [object] "File list"
 	 */
 	function handleUpload(data, files) {
+		data.$el.trigger(Events.queued, [ files ]);
+
 		var newFiles = [];
 
 		for (var i = 0; i < files.length; i++) {
@@ -179,7 +270,7 @@
 		}
 
 		if (!data.uploading) {
-			$Window.on(Events.beforeUnload, function(){
+			$Window.on(Events.beforeUnload, function() {
 				return data.leave;
 			});
 
@@ -223,7 +314,7 @@
 						}
 					}
 
-					uploadFile(data, data.queue[j], formData);
+					uploadFile(data, formData, data.queue[j]);
 				}
 
 				transfering++;
@@ -253,21 +344,22 @@
 	 * @param file [object] "Target file"
 	 * @param formData [object] "Target form"
 	 */
-	function uploadFile(data, file, formData) {
-		if (file.size >= data.maxSize) {
-			file.error = true;
-			data.$el.trigger(Events.fileError, [ file, "Too large" ]);
+	function uploadFile(data, formData, file) {
+		// Modify data before upload
+		formData = data.beforeSend.call(Window, formData, file);
 
-			checkQueue(data);
+		if (file.size >= data.maxSize || formData === false || file.error === true) {
+			abortFile(data, file, (!formData ? "abort" : "size"));
 		} else {
 			file.started = true;
 			file.transfer = $.ajax({
-				url: data.action,
-				data: formData,
-				type: "POST",
-				contentType:false,
-				processData: false,
-				cache: false,
+				url         : data.action,
+				data        : formData,
+				dataType    : data.dataType,
+				type        : "POST",
+				contentType :false,
+				processData : false,
+				cache       : false,
 				xhr: function() {
 					var $xhr = $.ajaxSettings.xhr();
 
@@ -279,7 +371,7 @@
 								total = e.total;
 
 							if (e.lengthComputable) {
-								percent = Math.ceil(position / total * 100);
+								percent = Math.ceil((position / total) * 100);
 							}
 
 							data.$el.trigger(Events.fileProgress, [ file, percent ]);
@@ -288,7 +380,7 @@
 
 					return $xhr;
 				},
-				beforeSend: function(e) {
+				beforeSend: function(jqXHR, settings) {
 					data.$el.trigger(Events.fileStart, [ file ]);
 				},
 				success: function(response, status, jqXHR) {
@@ -298,10 +390,7 @@
 					checkQueue(data);
 				},
 				error: function(jqXHR, status, error) {
-					file.error = true;
-					data.$el.trigger(Events.fileError, [ file, error ]);
-
-					checkQueue(data);
+					abortFile(data, file, error);
 				}
 			});
 		}
@@ -312,6 +401,9 @@
 	 * @name Upload
 	 * @description A jQuery plugin for simple drag and drop uploads.
 	 * @type widget
+	 * @main upload.js
+	 * @main upload.css
+	 * @dependency jQuery
 	 * @dependency core.js
 	 */
 
@@ -321,21 +413,28 @@
 			/**
 			 * @options
 			 * @param action [string] "Where to submit uploads"
+			 * @param beforeSend [function] "Run before request sent, must return modified formdata or `false` to cancel"
+			 * @param customClass [string] <''> "Class applied to instance"
+			 * @param dataType [string] <'html'> "Data type of AJAX request"
 			 * @param label [string] <'Drag and drop files or click to select'> "Drop target text"
 			 * @param leave [string] <'You have uploads pending, are you sure you want to leave this page?'> "Before leave message"
 			 * @param maxQueue [int] <2> "Number of files to simultaneously upload"
 			 * @param maxSize [int] <5242880> "Max file size allowed"
+			 * @param multiple [true] <true> "Flag to allow mutiple file uploads"
 			 * @param postData [object] "Extra data to post with upload"
 			 * @param postKey [string] <'file'> "Key to upload file as"
 			 */
 
 			defaults: {
-				customClass    : "",
 				action         : "",
+				beforeSend     : function(formdata) { return formdata; },
+				customClass    : "",
+				dataType       : "html",
 				label          : "Drag and drop files or click to select",
 				leave          : "You have uploads pending, are you sure you want to leave this page?",
 				maxQueue       : 2,
 				maxSize        : 5242880, // 5 mb
+				multiple       : true,
 				postData       : {},
 				postKey        : "file"
 			},
@@ -344,12 +443,17 @@
 				"input",
 				"target",
 				"multiple",
-				"dropping"
+				"dropping",
+				"disabled"
 			],
 
 			methods: {
 				_construct    : construct,
-				_destruct     : destruct
+				_destruct     : destruct,
+
+				disable       : disableUpload,
+				enable        : enableUpload,
+				abort         : abortUpload
 			}
 		}),
 
@@ -360,6 +464,7 @@
 		Events        = Plugin.events,
 		Functions     = Plugin.functions,
 
+		Window        = Formstone.window,
 		$Window       = Formstone.$window;
 
 		/**
@@ -378,5 +483,6 @@
 		Events.fileComplete    = "filecomplete";
 		Events.fileError       = "fileerror";
 		Events.start           = "start";
+		Events.queued          = "queued";
 
 })(jQuery, Formstone);
