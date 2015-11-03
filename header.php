@@ -8,13 +8,13 @@
 <link rel="shortcut icon" href="/assets/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<!--[if lt IE 8]>
+<!--[if IE]>
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
 <?php wp_head(); ?>
 
-<!--[if lt IE 8]>
+<!--[if IE]>
 <script src="/assets/js/app.ie.min.js"></script>
 <![endif]-->
 
