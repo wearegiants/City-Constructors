@@ -3,7 +3,7 @@
     <div class="fs-cell fs-lg-7 fs-md-5 fs-sm-half">
       <h1 class="btn btn-nav carousel-header__logo">City Constructors</h1>
     </div>
-    <div id="header-mobile" class="fs-cell fs-lg-hide fs-md-1 fs-sm-half menu">
+    <div id="header-mobile2" class="fs-cell fs-lg-hide fs-md-1 fs-sm-half menu text-right">
       <a data-swap-target="#mobile-menu" class="mobile-toggle btn btn-hamburg btn-nav btn-first"><span class="icon"></span></a>
     </div>
   </div>

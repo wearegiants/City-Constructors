@@ -26,7 +26,7 @@
 
 <hr class="invisible">
 
-<div id="home-featured">
+<div id="home-links">
   <div class='fs-row'>
     <div class="fs-cell fs-xl-11 fs-lg-12 fs-md-6 fs-sm-3 fs-centered">
       <div class="fs-row">
