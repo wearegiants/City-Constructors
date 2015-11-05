@@ -31,24 +31,28 @@
 
 <header id="header" class="<?php if(is_front_page()): ?>fs-grid  home<?php else: echo ' fs-grid '; endif; ?>"><div>
   <div class="fs-row">
-    <menu id="header-mobile" class="fs-cell fs-lg-hide fs-md-2 fs-sm-1 fs-right">
-      <a data-swap-target=".mobile-menu" class="mobile-toggle btn btn-hamburg btn-nav btn-first"><span class="icon"></span></a>
-    </menu>
-    <menu id="header-navigation" class="fs-cell fs-lg-10 fs-md-hide fs-sm-hide">
-      <?php echo wp_nav_menu( $mainMenu ); ?>
-    </menu>
-    <?php if(is_front_page()): ?>
-    <menu id="header-social" class="fs-cell fs-lg-2 fs-md-hide fs-sm-hide text-right">
-      <a target="_blank" href="https://www.facebook.com/cciteam" class="btn btn-nav ss-social ss-facebook"></a>
-      <a target="_blank" href="https://www.linkedin.com/company/2086741" class="btn btn-nav ss-social ss-linkedin"></a>
-      <a target="_blank" href="https://instagram.com/cciteam" class="btn btn-nav ss-social ss-instagram"></a>
-    </menu>
-    <?php endif; ?>
-    <?php if(!is_front_page()): ?>
-    <menu id="header-main" class="fs-cell fs-lg-2 fs-md-4 fs-sm-2 text-right">
-      <a href="/" id="header--logo" class="mobile-menu btn btn-logo btn-nav btn-last">CC</a>
-    </menu>
-    <?php endif; ?>
+    <div class="fs-cell fs-lg-11 fs-md-6 fs-sm-3 fs-centered">
+      <div class="fs-row">
+        <menu id="header-mobile" class="fs-cell fs-lg-hide fs-md-2 fs-sm-1 fs-right">
+          <a data-swap-target=".mobile-menu" class="mobile-toggle btn btn-hamburg btn-nav btn-first"><span class="icon"></span></a>
+        </menu>
+        <menu id="header-navigation" class="fs-cell fs-lg-10 fs-md-hide fs-sm-hide">
+          <?php echo wp_nav_menu( $mainMenu ); ?>
+        </menu>
+        <?php if(is_front_page()): ?>
+        <menu id="header-social" class="fs-cell fs-lg-2 fs-md-hide fs-sm-hide text-right">
+          <a target="_blank" href="https://www.facebook.com/cciteam" class="btn btn-nav ss-social ss-facebook"></a>
+          <a target="_blank" href="https://www.linkedin.com/company/2086741" class="btn btn-nav ss-social ss-linkedin"></a>
+          <a target="_blank" href="https://instagram.com/cciteam" class="btn btn-nav ss-social ss-instagram"></a>
+        </menu>
+        <?php endif; ?>
+        <?php if(!is_front_page()): ?>
+        <menu id="header-main" class="fs-cell fs-lg-2 fs-md-4 fs-sm-2 text-right">
+          <a href="/" id="header--logo" class="mobile-menu btn btn-logo btn-nav btn-last">CC</a>
+        </menu>
+        <?php endif; ?>
+      </div>
+    </div>
   </div>
 </div></header>
 

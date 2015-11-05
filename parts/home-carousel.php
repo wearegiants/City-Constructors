@@ -21,7 +21,7 @@
   <div class="carousel-slide background" data-background-options='{"source":"<?php echo $image['sizes']['gallery-lg']; ?>"}'>
     <div class="carousel-slide__meta section section-compact">
       <div class="fs-row">
-        <div class="fs-cell fs-lg-7 fs-md-5 fs-sm-3">
+        <div class="fs-cell fs-lg-11 fs-md-5 fs-sm-3 fs-centered">
           <?php the_sub_field('carousel_content'); ?>
           <!--<p class="emphasized">Our mission is to construct the most eye-catching and notable spaces in Los Angeles.</p>-->
           <!--<<small><a href="/projects/aka-hotel/">AKA Hotel</a></small>-->
